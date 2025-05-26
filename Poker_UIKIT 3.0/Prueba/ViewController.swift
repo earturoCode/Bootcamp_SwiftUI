@@ -19,11 +19,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var card8ImageView: UIImageView!
     @IBOutlet weak var card9ImageView: UIImageView!
     @IBOutlet weak var card10ImageView: UIImageView!
-    //De onda
+    //Decoracion
     @IBOutlet weak var card11ImageView: UIImageView!
-    @IBOutlet weak var card12ImageView: UIImageView!
+    //Fondo para ganardor / perdor
     @IBOutlet weak var fondo1ImageView: UIImageView!
     @IBOutlet weak var fondo2ImageView: UIImageView!
+    
+    @IBOutlet weak var formularioConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var repartirCartas: UIButton!
     
@@ -31,14 +33,34 @@ class ViewController: UIViewController {
     var jugador1: Jugador?
     var jugador2: Jugador?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        inicializarJuego()
-        card11ImageView.image = UIImage(named: "decoracion")
-        
-        repartirCartas.setTitle("Repartir", for: .normal)
-    }
-    
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            inicializarJuego()
+            card11ImageView.image = UIImage(named: "decoracion")
+            
+            repartirCartas.setTitle("Repartir", for: .normal)
+            // Deshabilitar botón inicialmente
+            repartirCartas.isEnabled = false
+            repartirCartas.alpha = 0.5
+            
+            // Validar cuando cambie el texto
+            name1TextField.addTarget(self, action: #selector(validarBoton), for: .editingChanged)
+            name2TextField.addTarget(self, action: #selector(validarBoton), for: .editingChanged)
+        }
+       
+        @objc func validarBoton() {
+            let texto1 = name1TextField.text ?? ""
+            let texto2 = name2TextField.text ?? ""
+            
+            if !texto1.isEmpty && !texto2.isEmpty {
+                repartirCartas.isEnabled = true
+                repartirCartas.alpha = 1.0
+            } else {
+                repartirCartas.isEnabled = false
+                repartirCartas.alpha = 0.5
+            }
+        }
+
 
     func inicializarJuego() {
         
@@ -50,9 +72,10 @@ class ViewController: UIViewController {
         jugador1 = Jugador(nombre: "")
         jugador2 = Jugador(nombre: "")
     }
-        
-
+    
+    
     @IBAction func repartirCards(_ sender: UIButton) {
+            
             //Validacion de acuerdo que tiene el boton de titulo
             if sender.currentTitle == "Repartir" {
                 // Validar nombre
@@ -62,8 +85,14 @@ class ViewController: UIViewController {
                     alerta.addAction(UIAlertAction(title: "OK", style: .default))
                     self.present(alerta, animated: true)
                     return
+                    
                 }
+
                 
+                formularioConstraint.constant = 280
+                UIView.animate(withDuration: 0.3) {
+                    self.view.layoutIfNeeded()
+                }
                 player1Label.isHidden = true
                 player2Label.isHidden = true
                 name1TextField.isHidden = true
@@ -114,10 +143,14 @@ class ViewController: UIViewController {
                 }
 
                 sender.setTitle("Volver a Jugar", for: .normal)
-
+                
             } else if sender.currentTitle == "Volver a Jugar" {
                 limpiarImagenes()
 
+                formularioConstraint.constant = 40
+                UIView.animate(withDuration: 0.3) {
+                    self.view.layoutIfNeeded()
+                }
                 player1Label.isHidden = false
                 player2Label.isHidden = false
                 name1TextField.isHidden = false
@@ -126,12 +159,14 @@ class ViewController: UIViewController {
                 name2TextField.isEnabled = true
                 fondo1ImageView?.backgroundColor = UIColor.clear
                 fondo2ImageView?.backgroundColor = UIColor.clear
-
                 
-
                 inicializarJuego()
 
                 sender.setTitle("Repartir", for: .normal)
+                
+                // Deshabilitar botón nuevamente
+                 validarBoton()
+                
             }
         }
 
@@ -208,4 +243,6 @@ class ViewController: UIViewController {
         
         print("Imágenes limpiadas para nueva partida")
     }
+    
+    
 }
