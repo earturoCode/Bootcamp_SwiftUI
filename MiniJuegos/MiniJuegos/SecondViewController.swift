@@ -1,0 +1,252 @@
+import UIKit
+
+class SecondViewController: UIViewController {
+    
+    @IBOutlet weak var tittleLabel: UILabel!
+    @IBOutlet weak var player1Label: UILabel!
+    @IBOutlet weak var player2Label: UILabel!
+    
+    @IBOutlet weak var name1TextField: UITextField!
+    @IBOutlet weak var name2TextField: UITextField!
+    
+    //Images Jugador 1
+    @IBOutlet weak var card1ImageView: UIImageView!
+    @IBOutlet weak var card2ImageView: UIImageView!
+    @IBOutlet weak var card3ImageView: UIImageView!
+    @IBOutlet weak var card4ImageView: UIImageView!
+    @IBOutlet weak var card5ImageView: UIImageView!
+    //Images Jugador 2
+    @IBOutlet weak var card6ImageView: UIImageView!
+    @IBOutlet weak var card7ImageView: UIImageView!
+    @IBOutlet weak var card8ImageView: UIImageView!
+    @IBOutlet weak var card9ImageView: UIImageView!
+    @IBOutlet weak var card10ImageView: UIImageView!
+    //Decoracion
+    @IBOutlet weak var card11ImageView: UIImageView!
+    
+    //Fondo para ganardor / perdor
+    @IBOutlet weak var fondo1ImageView: UIImageView!
+    @IBOutlet weak var fondo2ImageView: UIImageView!
+    
+    @IBOutlet var formularioConstraint: UIView!
+    
+    @IBOutlet weak var repartirCartas: UIButton!
+    
+    
+    var mazo: MazoDeCartas?
+    var jugador1: Jugador?
+    var jugador2: Jugador?
+    
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            inicializarJuego()
+            card11ImageView.image = UIImage(named: "decoracion")
+            
+            repartirCartas.setTitle("Repartir", for: .normal)
+            // Deshabilitar botón inicialmente
+            repartirCartas.isEnabled = false
+            repartirCartas.alpha = 0.5
+            
+            // Validar cuando cambie el texto
+            name1TextField.addTarget(self, action: #selector(validarBoton), for: .editingChanged)
+            name2TextField.addTarget(self, action: #selector(validarBoton), for: .editingChanged)
+        }
+       
+        @objc func validarBoton() {
+            let texto1 = name1TextField.text ?? ""
+            let texto2 = name2TextField.text ?? ""
+            
+            if !texto1.isEmpty && !texto2.isEmpty {
+                repartirCartas.isEnabled = true
+                repartirCartas.alpha = 1.0
+            } else {
+                repartirCartas.isEnabled = false
+                repartirCartas.alpha = 0.5
+            }
+        }
+
+
+    func inicializarJuego() {
+        
+        // Crear el mazo y mezclarlo
+        mazo = MazoDeCartas()
+        mazo?.mezclar()
+        
+        // Crear jugadores vacíos (los nombres se asignarán al repartir)
+        jugador1 = Jugador(nombre: "")
+        jugador2 = Jugador(nombre: "")
+    }
+    
+    
+    @IBAction func repartirCards(_ sender: UIButton) {
+            
+            //Validacion de acuerdo que tiene el boton de titulo
+            if sender.currentTitle == "Repartir" {
+                // Validar nombre
+                guard let nombre1 = name1TextField.text, !nombre1.isEmpty,
+                      let nombre2 = name2TextField.text, !nombre2.isEmpty else {
+                    let alerta = UIAlertController(title: "Error", message: "Ingresá los nombres de ambos jugadores.", preferredStyle: .alert)
+                    alerta.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(alerta, animated: true)
+                    return
+                }
+
+                
+//                formularioConstraint.constant = 280
+                UIView.animate(withDuration: 0.3) {
+                    self.view.layoutIfNeeded()
+                }
+                player1Label.isHidden = true
+                player2Label.isHidden = true
+                name1TextField.isHidden = true
+                name2TextField.isHidden = true
+                name1TextField.isEnabled = false
+                name2TextField.isEnabled = false
+                fondo1ImageView.isHidden = false
+                fondo2ImageView.isHidden = false
+
+                sender.setTitle("Volver a Jugar", for: .normal)
+
+
+                guard let mazoSeguro = mazo, mazoSeguro.cartas.count >= 10 else {
+                    inicializarJuego()
+                    return
+                }
+
+                jugador1 = Jugador(nombre: nombre1)
+                jugador2 = Jugador(nombre: nombre2)
+                let mano1 = mazoSeguro.darMano()
+                let mano2 = mazoSeguro.darMano()
+
+                guard mano1.count == 5 && mano2.count == 5 else {
+                    inicializarJuego()
+                    return
+                }
+
+                jugador1?.cartas = mano1
+                jugador2?.cartas = mano2
+                
+                jugador1?.tipoJugada = analizarJugada(mano1)
+                jugador2?.tipoJugada = analizarJugada(mano2)
+                
+                jugador1?.mostrarCartas()
+                jugador2?.mostrarCartas()
+
+                let repartiendoAlert = UIAlertController(title: nil, message: "Repartiendo cartas...", preferredStyle: .alert)
+                self.present(repartiendoAlert, animated: true) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        self.mostrarCartasEnPantalla()
+                        repartiendoAlert.dismiss(animated: true) {
+                            let mensajeGanador = self.determinarGanador()
+                            let ganadorAlert = UIAlertController(title: "¡Fin del juego!", message: mensajeGanador, preferredStyle: .alert)
+                            ganadorAlert.addAction(UIAlertAction(title: "Ok", style: .default))
+                            self.present(ganadorAlert, animated: true)
+                        }
+                    }
+                }
+
+                
+            } else if sender.currentTitle == "Volver a Jugar" {
+                limpiarImagenes()
+
+//                formularioConstraint.constant = 40
+                UIView.animate(withDuration: 0.3) {
+                    self.view.layoutIfNeeded()
+                }
+                player1Label.isHidden = false
+                player2Label.isHidden = false
+                name1TextField.isHidden = false
+                name2TextField.isHidden = false
+                name1TextField.isEnabled = true
+                name2TextField.isEnabled = true
+                fondo1ImageView?.backgroundColor = UIColor.clear
+                fondo2ImageView?.backgroundColor = UIColor.clear
+                
+                inicializarJuego()
+
+                sender.setTitle("Repartir", for: .normal)
+                
+                // Deshabilitar botón nuevamente
+                 validarBoton()
+                
+            }
+        }
+
+    
+ 
+    func determinarGanador() -> String {
+        guard let jugador1 = jugador1, let jugador2 = jugador2 else {
+            return "Error: No se pudieron cargar los jugadores"
+        }
+        
+        let resultado = quienGana(jugador1, jugador2)
+        print("Resultado: \(resultado)")
+        
+        
+        if resultado.contains(jugador1.nombre) {
+            fondo1ImageView.backgroundColor = UIColor.green
+            fondo2ImageView.backgroundColor = UIColor.red
+        } else if resultado.contains(jugador2.nombre) {
+            fondo1ImageView.backgroundColor = UIColor.red
+            fondo2ImageView.backgroundColor = UIColor.green
+        } else if resultado.contains("Empate") {
+            fondo1ImageView.backgroundColor = UIColor.gray
+            fondo2ImageView.backgroundColor = UIColor.gray
+        } else {
+            fondo1ImageView.backgroundColor = UIColor.clear
+            fondo2ImageView.backgroundColor = UIColor.clear
+        }
+        return resultado
+        
+    }
+    
+
+    func mostrarCartasEnPantalla() {
+        guard let jugador1 = jugador1, let jugador2 = jugador2 else {
+            print("Error: Jugadores no encontrados")
+            return
+        }
+                
+        // Cartas jugador 1
+        let cartas1 = jugador1.cartas
+        let imagenes1 = [card1ImageView, card2ImageView, card3ImageView, card4ImageView, card5ImageView]
+        
+        for i in 0..<min(cartas1.count, imagenes1.count) {
+            let nombreImagen = cartas1[i].mostrar()  // Ej: "AS", "5D"
+            print("Carta jugador 1 [\(i)]: \(nombreImagen)")
+            
+            // Verificar que la imagen existe
+            if let imagen = UIImage(named: nombreImagen) {
+                imagenes1[i]?.image = imagen
+            }
+        }
+        
+        // Cartas jugador 2
+        let cartas2 = jugador2.cartas
+        let imagenes2 = [card6ImageView, card7ImageView, card8ImageView, card9ImageView, card10ImageView]
+        
+        for i in 0..<min(cartas2.count, imagenes2.count) {
+            let nombreImagen = cartas2[i].mostrar()
+            
+            if let imagen = UIImage(named: nombreImagen) {
+                imagenes2[i]?.image = imagen
+            }
+        }
+    }
+    
+    func limpiarImagenes() {
+        let todasLasImagenes = [card1ImageView, card2ImageView, card3ImageView, card4ImageView, card5ImageView,
+                               card6ImageView, card7ImageView, card8ImageView, card9ImageView, card10ImageView]
+        
+        for imageView in todasLasImagenes {
+            imageView?.image = nil
+            imageView?.backgroundColor = UIColor.clear
+        }
+        
+        print("Imágenes limpiadas para nueva partida")
+    }
+    
+    
+}
+
+
