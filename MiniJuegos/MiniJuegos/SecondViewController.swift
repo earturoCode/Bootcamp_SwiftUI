@@ -28,10 +28,13 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var fondo1ImageView: UIImageView!
     @IBOutlet weak var fondo2ImageView: UIImageView!
     
-    @IBOutlet var formularioConstraint: UIView!
+    @IBOutlet weak var formularioConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var repartirCartas: UIButton!
     
+    // AGREGADO: Variables para recibir los nombres del FirstViewController
+    var nombreJugador1: String?
+    var nombreJugador2: String?
     
     var mazo: MazoDeCartas?
     var jugador1: Jugador?
@@ -39,31 +42,47 @@ class SecondViewController: UIViewController {
     
         override func viewDidLoad() {
             super.viewDidLoad()
+            
             inicializarJuego()
             card11ImageView.image = UIImage(named: "decoracion")
-            
+            // Configurar los nombres si vienen del FirstViewController
+            if let nombre1 = nombreJugador1 {
+                name1TextField.text = nombre1
+            }
+            if let nombre2 = nombreJugador2 {
+                name2TextField.text = nombre2
+            }
             repartirCartas.setTitle("Repartir", for: .normal)
             // Deshabilitar botón inicialmente
-            repartirCartas.isEnabled = false
-            repartirCartas.alpha = 0.5
-            
-            // Validar cuando cambie el texto
-            name1TextField.addTarget(self, action: #selector(validarBoton), for: .editingChanged)
-            name2TextField.addTarget(self, action: #selector(validarBoton), for: .editingChanged)
-        }
-       
-        @objc func validarBoton() {
-            let texto1 = name1TextField.text ?? ""
-            let texto2 = name2TextField.text ?? ""
-            
-            if !texto1.isEmpty && !texto2.isEmpty {
+            if nombreJugador1 != nil && nombreJugador2 != nil {
                 repartirCartas.isEnabled = true
                 repartirCartas.alpha = 1.0
             } else {
+                // Deshabilitar botón inicialmente si no tenemos nombres
                 repartirCartas.isEnabled = false
                 repartirCartas.alpha = 0.5
             }
+            // Validar cuando cambie el texto
+            if nombreJugador1 == nil || nombreJugador2 == nil {
+                name1TextField.addTarget(self, action: #selector(validarBoton), for: .editingChanged)
+                name2TextField.addTarget(self, action: #selector(validarBoton), for: .editingChanged)
+            }
+            
         }
+       
+    //  Función para validar el botón cuando no tenemos nombres predefinidos
+    @objc func validarBoton() {
+        let texto1 = name1TextField.text ?? ""
+        let texto2 = name2TextField.text ?? ""
+        
+        if !texto1.isEmpty && !texto2.isEmpty {
+            repartirCartas.isEnabled = true
+            repartirCartas.alpha = 1.0
+        } else {
+            repartirCartas.isEnabled = false
+            repartirCartas.alpha = 0.5
+        }
+    }
 
 
     func inicializarJuego() {
@@ -72,9 +91,6 @@ class SecondViewController: UIViewController {
         mazo = MazoDeCartas()
         mazo?.mezclar()
         
-        // Crear jugadores vacíos (los nombres se asignarán al repartir)
-        jugador1 = Jugador(nombre: "")
-        jugador2 = Jugador(nombre: "")
     }
     
     
@@ -92,7 +108,7 @@ class SecondViewController: UIViewController {
                 }
 
                 
-//                formularioConstraint.constant = 280
+                formularioConstraint.constant = 280
                 UIView.animate(withDuration: 0.3) {
                     self.view.layoutIfNeeded()
                 }
@@ -149,7 +165,7 @@ class SecondViewController: UIViewController {
             } else if sender.currentTitle == "Volver a Jugar" {
                 limpiarImagenes()
 
-//                formularioConstraint.constant = 40
+                formularioConstraint.constant = 40
                 UIView.animate(withDuration: 0.3) {
                     self.view.layoutIfNeeded()
                 }
@@ -162,12 +178,25 @@ class SecondViewController: UIViewController {
                 fondo1ImageView?.backgroundColor = UIColor.clear
                 fondo2ImageView?.backgroundColor = UIColor.clear
                 
+                // Restaurar los nombres originales si venían del FirstViewController
+                if let nombre1 = nombreJugador1 {
+                    name1TextField.text = nombre1
+                }
+                if let nombre2 = nombreJugador2 {
+                    name2TextField.text = nombre2
+                }
+                
                 inicializarJuego()
 
                 sender.setTitle("Repartir", for: .normal)
                 
-                // Deshabilitar botón nuevamente
-                 validarBoton()
+                // MODIFICADO: Validar botón según si tenemos nombres predefinidos o no
+                if nombreJugador1 != nil && nombreJugador2 != nil {
+                    repartirCartas.isEnabled = true
+                    repartirCartas.alpha = 1.0
+                } else {
+                    validarBoton()
+                }
                 
             }
         }
