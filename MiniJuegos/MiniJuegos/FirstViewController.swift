@@ -162,7 +162,10 @@ class FirstViewController: UIViewController {
 }
 extension FirstViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return games.count
+        if pickerView == self.pickerView {
+            return games.count
+        }
+        return 0
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
