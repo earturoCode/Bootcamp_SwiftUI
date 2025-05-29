@@ -1,5 +1,9 @@
 import UIKit
-
+// Estructura para UserDefaults
+struct PuntajeData: Codable {
+    let jugador: String
+    let puntaje: Int
+}
 class TopViewController: UIViewController {
 
     @IBOutlet weak var topPlayerTable: UITableView!
@@ -28,7 +32,8 @@ class TopViewController: UIViewController {
     }
     
     func setupTableView() {
-        
+        topPlayerTable.register(UITableViewCell.self, forCellReuseIdentifier: "celdaConDetalle")
+
         
         topPlayerTable.dataSource = self
         topPlayerTable.delegate = self
@@ -56,6 +61,14 @@ class TopViewController: UIViewController {
         }
     }
     
+    func guardarPuntajesEnUserDefaults() {
+        let datos = top5Puntajes.map { PuntajeData(jugador: $0.jugador, puntaje: $0.puntaje) }
+        if let encoded = try? JSONEncoder().encode(datos) {
+            UserDefaults.standard.set(encoded, forKey: "top5Puntajes")
+        }
+    }
+
+    
     // Función para agregar y ordenar un nuevo puntaje (si es necesario)
     func agregarNuevoPuntaje(_ puntaje: (jugador: String, puntaje: Int)) {
         // Agregar el nuevo puntaje al array
@@ -68,7 +81,7 @@ class TopViewController: UIViewController {
         if top5Puntajes.count > 5 {
             top5Puntajes = Array(top5Puntajes.prefix(5))
         }
-        
+        guardarPuntajesEnUserDefaults()
         // Actualizar la tabla
         topPlayerTable.reloadData()
     }
@@ -101,16 +114,13 @@ extension TopViewController: UITableViewDataSource, UITableViewDelegate {
         // Se obtiene el mejor jugador
         let jugador = top5Puntajes[indexPath.row]
         // Se asignan los textos a los labels
-          cell?.textLabel?.text = jugador.jugador
-        cell?.detailTextLabel?.text = "\(jugador.puntaje) pts"
+//          cell?.textLabel?.text = jugador.jugador
+          cell?.textLabel?.text = "\(indexPath.row + 1). \(jugador.jugador) \(jugador.puntaje) pts"
+//        cell?.detailTextLabel?.text = "\(jugador.puntaje) pts"
         return cell!
       }
         
     }
-// Estructura para UserDefaults
-struct PuntajeData: Codable {
-    let jugador: String
-    let puntaje: Int
-}
+
 
 
