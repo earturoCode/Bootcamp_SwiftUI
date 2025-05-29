@@ -188,17 +188,17 @@ class ThirdViewController: UIViewController {
         circulo.isUserInteractionEnabled = true
         
         // Animación de aparición - ESTA DEMAS
-        circulo.alpha = 0
-        circulo.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+//        circulo.alpha = 0
+//        circulo.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
         
         view.addSubview(circulo)
         objetosCirculares.append(circulo)
         
-        // Animar aparición
-        UIView.animate(withDuration: 0.3, animations: {
-            circulo.alpha = 1
-            circulo.transform = CGAffineTransform.identity
-        })
+//        // Animar aparición
+//        UIView.animate(withDuration: 0.3, animations: {
+//            circulo.alpha = 1
+//            circulo.transform = CGAffineTransform.identity
+//        })
         
         // Programar desaparición automática después de 2 segundos
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -325,10 +325,6 @@ class ThirdViewController: UIViewController {
             print("Error: No se pudo instanciar puntajeID")
             return
         }
-        
-        // Pasar los puntajes actualizados al TopViewController
-        topVC.top5Puntajes = listaPuntajes
-        
         // Usar NavigationController para navegar
         navigationController?.pushViewController(topVC, animated: true)
     }

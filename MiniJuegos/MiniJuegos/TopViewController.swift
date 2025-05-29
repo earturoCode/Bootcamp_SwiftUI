@@ -12,8 +12,8 @@ class TopViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        UserDefaults.standard.removeObject(forKey: "top5Puntajes")
         setupTableView()
-
         if top5Puntajes.isEmpty {
             cargarPuntajesDesdeUserDefaults()
         } else {
@@ -27,12 +27,13 @@ class TopViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        cargarPuntajesDesdeUserDefaults()
         // Recargar datos cada vez que aparece la vista
         topPlayerTable.reloadData()
     }
     
     func setupTableView() {
-        topPlayerTable.register(UITableViewCell.self, forCellReuseIdentifier: "celdaConDetalle")
+//        topPlayerTable.register(UITableViewCell.self, forCellReuseIdentifier: "celdaConDetalle") solo si tengo en otro archivo
 
         
         topPlayerTable.dataSource = self
@@ -51,13 +52,7 @@ class TopViewController: UIViewController {
            let puntajesData = try? JSONDecoder().decode([PuntajeData].self, from: data) {
             top5Puntajes = puntajesData.map { (jugador: $0.jugador, puntaje: $0.puntaje) }
         } else {
-            // Si no hay datos guardados, mostrar datos por defecto
-            top5Puntajes = [
-                ("Juan", 120),
-                ("Ana", 100),
-                ("Luis", 90),
-                ("Carlos", 70)
-            ]
+            top5Puntajes = []
         }
     }
     
@@ -93,7 +88,7 @@ extension TopViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return top5Puntajes.count
+        return top5Puntajes.isEmpty ? 1 : top5Puntajes.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -101,26 +96,23 @@ extension TopViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     
-//    Se llama cada vez que el tableView necesita una Celda para cada jugador, nombre y puntaje.
-      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Se define un identificador de celda.
+    //    Se llama cada vez que el tableView necesita una Celda para cada jugador, nombre y puntaje.
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "celdaConDetalle"
-        // Actualiza la celda con el mejor puntaje
-        var cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)
-        // Se crea una celda nueva si no hay ninguna disponible
-        if cell == nil {
-          cell = UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
-        }
-        // Se obtiene el mejor jugador
-        let jugador = top5Puntajes[indexPath.row]
-        // Se asignan los textos a los labels
-//          cell?.textLabel?.text = jugador.jugador
-          cell?.textLabel?.text = "\(indexPath.row + 1). \(jugador.jugador) \(jugador.puntaje) pts"
-//        cell?.detailTextLabel?.text = "\(jugador.puntaje) pts"
-        return cell!
-      }
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         
+//        if cell == nil {
+//            cell = UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
+//        }
+//
+        let jugador = top5Puntajes[indexPath.row]
+        cell.textLabel?.text = "\(indexPath.row + 1). \(jugador.jugador) "
+        cell.detailTextLabel?.text = "\(jugador.puntaje) pts"
+        cell.detailTextLabel?.textColor = .red
+        return cell
     }
+    
+}
 
 
 

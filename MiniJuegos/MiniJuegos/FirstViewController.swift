@@ -24,7 +24,7 @@ class FirstViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 //      Deshabilitar la edición directa del texto en el picker
-        pickeerTextField.isUserInteractionEnabled = true
+        pickeerTextField.tintColor = .clear // oculta el cursor
         // Configurar Picker
         pickerView.delegate = self
         pickerView.dataSource = self

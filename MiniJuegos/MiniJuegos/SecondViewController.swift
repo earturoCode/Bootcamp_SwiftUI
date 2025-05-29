@@ -48,9 +48,11 @@ class SecondViewController: UIViewController {
             // Configurar los nombres si vienen del FirstViewController
             if let nombre1 = nombreJugador1 {
                 name1TextField.text = nombre1
+                name1TextField.tintColor = .clear // oculta el cursor
             }
             if let nombre2 = nombreJugador2 {
                 name2TextField.text = nombre2
+                name2TextField.tintColor = .clear // oculta el cursor
             }
             repartirCartas.setTitle("Repartir", for: .normal)
             // Deshabilitar botón inicialmente
