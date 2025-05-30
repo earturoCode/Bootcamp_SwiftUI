@@ -35,7 +35,6 @@ class FirstViewController: UIViewController {
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPicker))
             view.addGestureRecognizer(tapGesture)
 //            Deshabilitar botón inicialmente
-
             playBoton.isEnabled = false
             playBoton.alpha = 0.5
     }
@@ -60,6 +59,7 @@ class FirstViewController: UIViewController {
     
     @IBAction func puntajesTotalBoton(_ sender: Any) {
         guard let vc = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { return }
+        vc.tipoVista = .misPartidas  // ← Solo mis puntajes
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -109,7 +109,7 @@ class FirstViewController: UIViewController {
             return
         }
         
-        // Crear Jugador 1 y Jugador 2 (la PC)
+        // Crear Jugador 1 y Jugador 2(PC)
         jugador1 = Jugador(nombre: nombre1)
         
         if juegoSeleccionado == "Poker" {

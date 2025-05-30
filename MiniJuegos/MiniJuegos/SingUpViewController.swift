@@ -2,7 +2,6 @@ import UIKit
 
 class SingUpViewController: UIViewController {
     
-    // MARK: - UI Elements
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Crear Cuenta"
@@ -79,14 +78,12 @@ class SingUpViewController: UIViewController {
         return button
     }()
     
-    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
     }
     
-    // MARK: - UI Setup
     private func setupUI() {
         view.backgroundColor = .systemBackground
         
@@ -100,9 +97,9 @@ class SingUpViewController: UIViewController {
         view.addSubview(alreadyHaveAccountLabel)
         view.addSubview(loginButton)
         
-        // Setup constraints
+        // onstraints
         NSLayoutConstraint.activate([
-            // Title
+            // Titulos
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
@@ -136,7 +133,7 @@ class SingUpViewController: UIViewController {
             signUpButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             signUpButton.heightAnchor.constraint(equalToConstant: 50),
             
-            // Already have account label
+            // Ya tiene cuenta label
             alreadyHaveAccountLabel.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 30),
             alreadyHaveAccountLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
@@ -149,13 +146,11 @@ class SingUpViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
 
-    // MARK: - Actions Setup
     private func setupActions() {
         signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
     }
     
-    // MARK: - Button Actions
     @objc private func signUpButtonTapped() {
         // Validar campos vacíos
         guard let name = nameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !name.isEmpty,
@@ -191,7 +186,7 @@ class SingUpViewController: UIViewController {
         let result = UserManager.shared.saveUser(newUser)
         
         if result.success {
-            // NUEVO: Auto-login después del registro exitoso
+            // Auto-login después del registro exitoso
             UserManager.shared.setCurrentUser(newUser)
             
             // Mostrar mensaje de éxito y navegar directamente a FirstViewController

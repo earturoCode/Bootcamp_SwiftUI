@@ -17,7 +17,6 @@ class LoginViewController: UIViewController {
     }
     
     private func setupUI() {
-        // Configurar x` más claros
         correoUsuTextField.placeholder = "Usuario o Email"
         contrasenaTextField.placeholder = "Contraseña"
         contrasenaTextField.isSecureTextEntry = true
@@ -73,10 +72,7 @@ class LoginViewController: UIViewController {
     
     @IBAction func topTenBoton(_ sender: Any) {
         guard let puntajesVC = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { return }
-        
-        // Pasar los puntajes actualizados
+        puntajesVC.tipoVista = .top10  // ← Esto hace la magia
         navigationController?.pushViewController(puntajesVC, animated: true)
-        
-        
     }
 }

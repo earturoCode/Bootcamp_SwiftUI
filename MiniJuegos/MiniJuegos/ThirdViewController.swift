@@ -77,11 +77,9 @@ class ThirdViewController: UIViewController {
     }
     
     @IBAction func topmejoresBoton(_ sender: Any) {
-        guard let puntajesVC = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { return }
-        
-        // Pasar los puntajes actualizados
-        puntajesVC.top5Puntajes = listaPuntajes
-        navigationController?.pushViewController(puntajesVC, animated: true)
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { return }
+        vc.tipoVista = .top5  // ← Top 5 general
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     
@@ -138,7 +136,7 @@ class ThirdViewController: UIViewController {
     
     func iniciarGeneracionObjetos() {
         gameTimer?.invalidate()
-        gameTimer = Timer.scheduledTimer(timeInterval: 1.5, // Aparece cada 1.5 segundos
+        gameTimer = Timer.scheduledTimer(timeInterval: 2, // Aparece cada 1.5 segundos
                                          target: self,
                                          selector: #selector(crearObjetoCircular),
                                          userInfo: nil,
@@ -189,18 +187,18 @@ class ThirdViewController: UIViewController {
         circulo.addGestureRecognizer(tapGesture)
         circulo.isUserInteractionEnabled = true
         
-        // Animación de aparición - ESTA DEMAS
-        //        circulo.alpha = 0
-        //        circulo.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+//         Animación de aparición - ESTA DEMAS
+                circulo.alpha = 0
+                circulo.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
         
         view.addSubview(circulo)
         objetosCirculares.append(circulo)
         
-        //        // Animar aparición
-        //        UIView.animate(withDuration: 0.3, animations: {
-        //            circulo.alpha = 1
-        //            circulo.transform = CGAffineTransform.identity
-        //        })
+                // Animar aparición
+                UIView.animate(withDuration: 0.3, animations: {
+                    circulo.alpha = 1
+                    circulo.transform = CGAffineTransform.identity
+                })
         
         // Programar desaparición automática después de 2 segundos
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
