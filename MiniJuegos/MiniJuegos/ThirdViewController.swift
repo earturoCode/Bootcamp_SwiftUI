@@ -12,8 +12,7 @@ class ThirdViewController: UIViewController {
     
     // Variable para recibir el nombre del jugador desde FirstViewController
     var nombreJugador1: String?
-    var nombreJugador2: String?
-
+    
     
     var timer: Timer?
     var gameTimer: Timer?
@@ -26,6 +25,7 @@ class ThirdViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //  Inicializar la UI correctamente desde el inicio
         inicializarUI()
         
@@ -190,17 +190,17 @@ class ThirdViewController: UIViewController {
         circulo.isUserInteractionEnabled = true
         
         // Animación de aparición - ESTA DEMAS
-//        circulo.alpha = 0
-//        circulo.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+        //        circulo.alpha = 0
+        //        circulo.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
         
         view.addSubview(circulo)
         objetosCirculares.append(circulo)
         
-//        // Animar aparición
-//        UIView.animate(withDuration: 0.3, animations: {
-//            circulo.alpha = 1
-//            circulo.transform = CGAffineTransform.identity
-//        })
+        //        // Animar aparición
+        //        UIView.animate(withDuration: 0.3, animations: {
+        //            circulo.alpha = 1
+        //            circulo.transform = CGAffineTransform.identity
+        //        })
         
         // Programar desaparición automática después de 2 segundos
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -270,7 +270,7 @@ class ThirdViewController: UIViewController {
         if let nombre = nombreJugador1 {
             agregarYGuardarPuntaje(jugador: nombre, puntaje: puntaje)
         }
-
+        
         timerLabel.text = "10 s"
         segundos = 10
         
@@ -322,11 +322,7 @@ class ThirdViewController: UIViewController {
         gameTimer?.invalidate()
         
     }
-    @IBAction func verTop5Presionado(_ sender: UIButton) {
-        guard let vc = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { return }
-        vc.modo = .top5
-        navigationController?.pushViewController(vc, animated: true)
-    }
+
     //    Estructura para codificar/decodificar los puntajes
     struct PuntajeData: Codable {
         let jugador: String

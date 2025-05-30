@@ -145,7 +145,10 @@ class SingUpViewController: UIViewController {
             loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
-    
+    @objc private func loginButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+
     // MARK: - Actions Setup
     private func setupActions() {
         signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
@@ -188,10 +191,23 @@ class SingUpViewController: UIViewController {
         let result = UserManager.shared.saveUser(newUser)
         
         if result.success {
-            // Mostrar mensaje de éxito y volver al login
+            // NUEVO: Auto-login después del registro exitoso
+            UserManager.shared.setCurrentUser(newUser)
+            
+            // Mostrar mensaje de éxito y navegar directamente a FirstViewController
             let alert = UIAlertController(title: "¡Éxito!", message: result.message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-                self.navigationController?.popViewController(animated: true)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default) { _ in
+                // Navegar directamente a FirstViewController
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let firstVC = storyboard.instantiateViewController(withIdentifier: "") as! FirstViewController
+                
+                // Limpiar el stack de navegación y ir a FirstViewController
+                var viewControllers = self.navigationController?.viewControllers ?? []
+                // Remover el LoginViewController del stack si existe
+                viewControllers.removeAll { $0 is LoginViewController }
+                viewControllers.append(firstVC)
+                
+                self.navigationController?.setViewControllers(viewControllers, animated: true)
             })
             present(alert, animated: true)
         } else {
@@ -199,17 +215,10 @@ class SingUpViewController: UIViewController {
             showAlert(title: "Error", message: result.message)
         }
     }
-    
-    @objc private func loginButtonTapped() {
-        // Volver al LoginViewController
-        navigationController?.popViewController(animated: true)
-    }
-    
-    // MARK: - Helper Methods
     private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alertController, animated: true, completion: nil)
     }
-}
 
+}
