@@ -4,6 +4,14 @@ struct PuntajeData: Codable {
     let jugador: String
     let puntaje: Int
 }
+
+// ENUM para definir qué tipo de vista mostrar
+enum TipoVista {
+    case top5           // Top 5 general
+    case top10          // Top 10 para login
+    case misPartidas    // Solo partidas del jugador actual
+}
+
 class TopViewController: UIViewController {
 
     @IBOutlet weak var topPlayerTable: UITableView!
