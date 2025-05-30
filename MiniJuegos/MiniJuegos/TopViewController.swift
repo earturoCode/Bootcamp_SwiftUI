@@ -9,6 +9,9 @@ class TopViewController: UIViewController {
     @IBOutlet weak var topPlayerTable: UITableView!
     // Array para almacenar los puntajes (será actualizado desde ThirdViewController)
     var top5Puntajes: [(jugador: String, puntaje: Int)] = []
+    var juegoFiltrado: String?
+    var jugadorFiltrado: String?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,8 +22,6 @@ class TopViewController: UIViewController {
         } else {
             // Ya se pasaron puntajes desde ThirdViewController, no recargar
         }
-
-        
         // Configurar la vista
         self.title = "Top 5 Jugadores"
     }
