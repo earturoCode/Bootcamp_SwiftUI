@@ -12,6 +12,8 @@ class ThirdViewController: UIViewController {
     
     // Variable para recibir el nombre del jugador desde FirstViewController
     var nombreJugador1: String?
+    var nombreJugador2: String?
+
     
     var timer: Timer?
     var gameTimer: Timer?
@@ -321,12 +323,9 @@ class ThirdViewController: UIViewController {
         
     }
     @IBAction func verTop5Presionado(_ sender: UIButton) {
-        guard let topVC = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { //"puntajeID") as? TopViewController else
-            print("Error: No se pudo instanciar puntajeID")
-            return
-        }
-        // Usar NavigationController para navegar
-        navigationController?.pushViewController(topVC, animated: true)
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { return }
+        vc.modo = .top5
+        navigationController?.pushViewController(vc, animated: true)
     }
     //    Estructura para codificar/decodificar los puntajes
     struct PuntajeData: Codable {
