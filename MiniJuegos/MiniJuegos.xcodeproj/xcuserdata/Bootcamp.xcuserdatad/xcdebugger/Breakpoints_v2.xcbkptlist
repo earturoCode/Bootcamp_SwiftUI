@@ -7,17 +7,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8731A09E-4B75-4483-81A0-E564AFE00316"
+            uuid = "05B8E4A0-D131-4300-974E-8EB180C2333E"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MiniJuegos/ThirdViewController.swift"
+            filePath = "MiniJuegos/MazoDeCartas.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "17"
-            endingLineNumber = "17"
-            landmarkName = "ThirdViewController"
-            landmarkType = "3">
+            startingLineNumber = "11"
+            endingLineNumber = "11"
+            landmarkName = "valoresCartas()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

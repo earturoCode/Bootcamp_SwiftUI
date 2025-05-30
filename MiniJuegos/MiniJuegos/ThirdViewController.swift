@@ -13,6 +13,7 @@ class ThirdViewController: UIViewController {
     // Variable para recibir el nombre del jugador desde FirstViewController
     var nombreJugador1: String?
     
+    
     var timer: Timer?
     var gameTimer: Timer?
     var segundos = 30
@@ -24,6 +25,7 @@ class ThirdViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //  Inicializar la UI correctamente desde el inicio
         inicializarUI()
         
@@ -75,11 +77,9 @@ class ThirdViewController: UIViewController {
     }
     
     @IBAction func topmejoresBoton(_ sender: Any) {
-        guard let puntajesVC = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { return }
-        
-        // Pasar los puntajes actualizados
-        puntajesVC.top5Puntajes = listaPuntajes
-        navigationController?.pushViewController(puntajesVC, animated: true)
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { return }
+        vc.tipoVista = .top5  // ← Top 5 general
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     
@@ -136,7 +136,7 @@ class ThirdViewController: UIViewController {
     
     func iniciarGeneracionObjetos() {
         gameTimer?.invalidate()
-        gameTimer = Timer.scheduledTimer(timeInterval: 1.5, // Aparece cada 1.5 segundos
+        gameTimer = Timer.scheduledTimer(timeInterval: 2, // Aparece cada 1.5 segundos
                                          target: self,
                                          selector: #selector(crearObjetoCircular),
                                          userInfo: nil,
@@ -187,18 +187,18 @@ class ThirdViewController: UIViewController {
         circulo.addGestureRecognizer(tapGesture)
         circulo.isUserInteractionEnabled = true
         
-        // Animación de aparición - ESTA DEMAS
-        circulo.alpha = 0
-        circulo.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+//         Animación de aparición - ESTA DEMAS
+                circulo.alpha = 0
+                circulo.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
         
         view.addSubview(circulo)
         objetosCirculares.append(circulo)
         
-        // Animar aparición
-        UIView.animate(withDuration: 0.3, animations: {
-            circulo.alpha = 1
-            circulo.transform = CGAffineTransform.identity
-        })
+                // Animar aparición
+                UIView.animate(withDuration: 0.3, animations: {
+                    circulo.alpha = 1
+                    circulo.transform = CGAffineTransform.identity
+                })
         
         // Programar desaparición automática después de 2 segundos
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -268,7 +268,7 @@ class ThirdViewController: UIViewController {
         if let nombre = nombreJugador1 {
             agregarYGuardarPuntaje(jugador: nombre, puntaje: puntaje)
         }
-
+        
         timerLabel.text = "10 s"
         segundos = 10
         
@@ -320,18 +320,7 @@ class ThirdViewController: UIViewController {
         gameTimer?.invalidate()
         
     }
-    @IBAction func verTop5Presionado(_ sender: UIButton) {
-        guard let topVC = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { //"puntajeID") as? TopViewController else
-            print("Error: No se pudo instanciar puntajeID")
-            return
-        }
-        
-        // Pasar los puntajes actualizados al TopViewController
-        topVC.top5Puntajes = listaPuntajes
-        
-        // Usar NavigationController para navegar
-        navigationController?.pushViewController(topVC, animated: true)
-    }
+
     //    Estructura para codificar/decodificar los puntajes
     struct PuntajeData: Codable {
         let jugador: String
