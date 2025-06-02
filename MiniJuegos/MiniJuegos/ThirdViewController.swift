@@ -25,12 +25,11 @@ class ThirdViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        startBoton.layer.cornerRadius = 8
+        verTop5.layer.cornerRadius = 8
         //  Inicializar la UI correctamente desde el inicio
         inicializarUI()
-        
         cargarPuntajes()
-        
         // Mostrar el nombre del jugador recibido desde FirstViewController
         if let nombre = nombreJugador1 {
             namej1TextField.text = nombre
@@ -55,7 +54,7 @@ class ThirdViewController: UIViewController {
         let puntajesData = listaPuntajes.map { PuntajeData(jugador: $0.jugador, puntaje: $0.puntaje) }
         if let data = try? JSONEncoder().encode(puntajesData) {
             UserDefaults.standard.set(data, forKey: "top5Puntajes")
-            //            UserDefaults.standard.synchronize() // Forzar sincronización
+            UserDefaults.standard.synchronize() // Forzar sincronización
         }
     }
     
@@ -278,13 +277,15 @@ class ThirdViewController: UIViewController {
     
     //        Centraliza la lógica de agregar y guardar puntajes
     func agregarYGuardarPuntaje(jugador: String, puntaje: Int) {
+        // Agregar el nuevo puntaje SIN limitar
         listaPuntajes.append((jugador: jugador, puntaje: puntaje))
+        // Ordenar por puntaje descendente
         listaPuntajes.sort { $0.puntaje > $1.puntaje }
         
-        if listaPuntajes.count > 5 {
-            listaPuntajes = Array(listaPuntajes.prefix(5))
-        }
-        
+//        if listaPuntajes.count > 5 {
+//            listaPuntajes = Array(listaPuntajes.prefix(5))
+//        }
+        // Guardar TODOS los puntajes (no solo los primeros 5)
         guardarPuntajes()
     }
     
@@ -319,12 +320,6 @@ class ThirdViewController: UIViewController {
         timer?.invalidate()
         gameTimer?.invalidate()
         
-    }
-
-    //    Estructura para codificar/decodificar los puntajes
-    struct PuntajeData: Codable {
-        let jugador: String
-        let puntaje: Int
     }
     
 }

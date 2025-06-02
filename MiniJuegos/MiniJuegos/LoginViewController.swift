@@ -13,12 +13,12 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        loginBoton.layer.cornerRadius = 8
+        topBoton.layer.cornerRadius = 8
 
     }
     
     private func setupUI() {
-        correoUsuTextField.placeholder = "Usuario o Email"
-        contrasenaTextField.placeholder = "Contraseña"
         contrasenaTextField.isSecureTextEntry = true
     }
     

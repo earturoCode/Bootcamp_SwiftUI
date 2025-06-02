@@ -1,20 +1,20 @@
 import Foundation
 
-// MARK: - User Model
+// Variables para el usuario
 struct User: Codable {
     let username: String
     let email: String
     let password: String
 }
 
-// MARK: - UserManager Class
+// UserManager Class
 class UserManager {
     static let shared = UserManager()
     private let userDefaultsKey = "RegisteredUsers"
     
     private init() {}
     
-    // MARK: - Save User
+    // Guardar los Users
     func saveUser(_ user: User) -> (success: Bool, message: String) {
         var users = getAllUsers()
         
@@ -40,7 +40,6 @@ class UserManager {
         return (false, "Error al guardar el usuario")
     }
     
-    // MARK: - Get All Users
     func getAllUsers() -> [User] {
         guard let data = UserDefaults.standard.data(forKey: userDefaultsKey),
               let users = try? JSONDecoder().decode([User].self, from: data) else {
@@ -49,7 +48,7 @@ class UserManager {
         return users
     }
     
-    // MARK: - Validate Login
+    // Validar el Login
     func validateLogin(username: String, password: String) -> (success: Bool, user: User?) {
         let users = getAllUsers()
         
@@ -62,19 +61,19 @@ class UserManager {
         return (false, nil)
     }
     
-    // MARK: - Check if username exists
+    // Verificar si el Usu existe
     func usernameExists(_ username: String) -> Bool {
         let users = getAllUsers()
         return users.contains(where: { $0.username.lowercased() == username.lowercased() })
     }
     
-    // MARK: - Check if email exists
+    // Verificar si el correo ya existe
     func emailExists(_ email: String) -> Bool {
         let users = getAllUsers()
         return users.contains(where: { $0.email.lowercased() == email.lowercased() })
     }
     
-    // MARK: - Get current user (optional - para mantener sesión)
+    // para mantener sesión abierta
     func getCurrentUser() -> User? {
         guard let data = UserDefaults.standard.data(forKey: "CurrentUser"),
               let user = try? JSONDecoder().decode(User.self, from: data) else {
@@ -83,26 +82,16 @@ class UserManager {
         return user
     }
     
-    // MARK: - Set current user (optional - para mantener sesión)
+    // para mantener sesión abierta
     func setCurrentUser(_ user: User) {
         if let encoded = try? JSONEncoder().encode(user) {
             UserDefaults.standard.set(encoded, forKey: "CurrentUser")
         }
     }
     
-    // MARK: - Logout
+    // Logout
     func logout() {
         UserDefaults.standard.removeObject(forKey: "CurrentUser")
-    }
-    
-    // MARK: - Debug: Print all users (solo para desarrollo)
-    func printAllUsers() {
-        let users = getAllUsers()
-        print("=== USUARIOS REGISTRADOS ===")
-        for user in users {
-            print("Usuario: \(user.username), Email: \(user.email)")
-        }
-        print("=============================")
     }
 }
 

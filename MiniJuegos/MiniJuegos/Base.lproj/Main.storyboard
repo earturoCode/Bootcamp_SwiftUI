@@ -45,9 +45,11 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aVJ-5I-JtI">
                                 <rect key="frame" x="56" y="317" width="280" height="35"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="xqz-XU-etW"/>
                                 </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="gray" title="Iniciar sesión"/>
                                 <connections>
@@ -60,29 +62,31 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bienvenid@ de Nuevo!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z4b-KO-VIF">
-                                <rect key="frame" x="113" y="162" width="171" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hSZ-uY-Dfi">
                                 <rect key="frame" x="56" y="461" width="280" height="35"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="FuW-CU-sul"/>
                                     <constraint firstAttribute="height" constant="35" id="pJn-kO-3Zx"/>
                                 </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="Top 10🏅">
-                                    <color key="baseForegroundColor" red="0.022607963530000001" green="0.36808764929999999" blue="0.98017078639999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </buttonConfiguration>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Top 10🏅">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                                 <connections>
                                     <action selector="topTenBoton:" destination="Qu1-M1-zGx" eventType="touchUpInside" id="kcj-sM-5Xe"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bienvenid@ de Nuevo!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z4b-KO-VIF">
+                                <rect key="frame" x="49" y="162" width="294" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Fcf-wU-F3M"/>
-                        <color key="backgroundColor" red="0.52303802967071533" green="0.91199564933776855" blue="0.81003230810165405" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Fcf-wU-F3M" firstAttribute="trailing" secondItem="cpF-gi-RSi" secondAttribute="trailing" constant="141" id="3XC-iW-89t"/>
                             <constraint firstItem="OPq-BH-f6k" firstAttribute="top" secondItem="O9k-ts-aQk" secondAttribute="bottom" constant="27" id="68U-5D-q3o"/>
@@ -94,7 +98,7 @@
                             <constraint firstItem="aVJ-5I-JtI" firstAttribute="top" secondItem="OPq-BH-f6k" secondAttribute="bottom" constant="21" id="HPa-qW-Fcj"/>
                             <constraint firstItem="Fcf-wU-F3M" firstAttribute="bottom" secondItem="hSZ-uY-Dfi" secondAttribute="bottom" constant="288" id="KJe-nA-vTi"/>
                             <constraint firstItem="gAG-by-Xe0" firstAttribute="top" secondItem="aVJ-5I-JtI" secondAttribute="bottom" constant="24" id="KPe-Tx-lva"/>
-                            <constraint firstItem="Fcf-wU-F3M" firstAttribute="trailing" secondItem="z4b-KO-VIF" secondAttribute="trailing" constant="109" id="P8p-ZX-aFI"/>
+                            <constraint firstItem="Fcf-wU-F3M" firstAttribute="trailing" secondItem="z4b-KO-VIF" secondAttribute="trailing" constant="50" id="P8p-ZX-aFI"/>
                             <constraint firstItem="cpF-gi-RSi" firstAttribute="leading" secondItem="Fcf-wU-F3M" secondAttribute="leading" constant="141" id="PG0-Py-fpp"/>
                             <constraint firstItem="O9k-ts-aQk" firstAttribute="top" secondItem="z4b-KO-VIF" secondAttribute="bottom" constant="18" id="QhN-db-Ll1"/>
                             <constraint firstItem="aVJ-5I-JtI" firstAttribute="leading" secondItem="Fcf-wU-F3M" secondAttribute="leading" constant="56" id="WdM-1f-q6L"/>
@@ -102,7 +106,7 @@
                             <constraint firstItem="Fcf-wU-F3M" firstAttribute="trailing" secondItem="OPq-BH-f6k" secondAttribute="trailing" constant="57" id="b72-6W-ipP"/>
                             <constraint firstItem="cpF-gi-RSi" firstAttribute="top" secondItem="aVJ-5I-JtI" secondAttribute="bottom" constant="41" id="dpn-K3-RP5"/>
                             <constraint firstItem="Fcf-wU-F3M" firstAttribute="trailing" secondItem="aVJ-5I-JtI" secondAttribute="trailing" constant="57" id="nz4-ER-CnB"/>
-                            <constraint firstItem="z4b-KO-VIF" firstAttribute="leading" secondItem="Fcf-wU-F3M" secondAttribute="leading" constant="113" id="rQY-bT-hLV"/>
+                            <constraint firstItem="z4b-KO-VIF" firstAttribute="leading" secondItem="Fcf-wU-F3M" secondAttribute="leading" constant="49" id="rQY-bT-hLV"/>
                             <constraint firstItem="hSZ-uY-Dfi" firstAttribute="leading" secondItem="Fcf-wU-F3M" secondAttribute="leading" constant="56" id="sJD-1L-asJ"/>
                             <constraint firstItem="z4b-KO-VIF" firstAttribute="top" secondItem="Fcf-wU-F3M" secondAttribute="top" id="uS0-Gs-gIR"/>
                             <constraint firstItem="gAG-by-Xe0" firstAttribute="leading" secondItem="Fcf-wU-F3M" secondAttribute="leading" constant="107" id="ucB-qz-4hD"/>
@@ -134,7 +138,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="80q-xz-N7t"/>
-                        <color key="backgroundColor" red="0.61745291950000003" green="0.90339082479999999" blue="0.81567817929999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <navigationItem key="navigationItem" id="RP5-MS-frS"/>
                 </viewController>
@@ -160,13 +164,13 @@
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tuy-dT-8Gr">
                                 <rect key="frame" x="57" y="309" width="280" height="35"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="lz5-tf-N27"/>
                                 </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="Jugar">
-                                    <color key="baseForegroundColor" systemColor="tintColor"/>
-                                </buttonConfiguration>
+                                <buttonConfiguration key="configuration" style="gray" title="Jugar"/>
                                 <connections>
                                     <action selector="jugarBoton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Pja-Yi-mNr"/>
                                 </connections>
@@ -194,6 +198,8 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rsM-bR-Jat">
                                 <rect key="frame" x="57" y="366" width="280" height="35"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="gray" title="Ver Puntajes!"/>
                                 <connections>
@@ -220,7 +226,7 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" red="0.75643759965896606" green="0.94023323059082031" blue="0.84405273199081421" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="rsM-bR-Jat" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="57" id="4E8-9J-d8o"/>
                             <constraint firstItem="pil-Sl-cbg" firstAttribute="top" secondItem="ytJ-Mi-osy" secondAttribute="bottom" constant="8" symbolic="YES" id="4Na-6Q-eZk"/>
@@ -359,9 +365,11 @@
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TZu-OH-fPl">
                                 <rect key="frame" x="132" y="291" width="129" height="34.333333333333314"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="Repartir">
-                                    <color key="baseForegroundColor" systemColor="labelColor"/>
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <color key="baseBackgroundColor" systemColor="systemGray2Color"/>
                                 </buttonConfiguration>
                                 <connections>
@@ -370,7 +378,7 @@
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="aPz-IH-1td"/>
-                        <color key="backgroundColor" red="0.79260760549999998" green="0.93475395439999998" blue="0.85097080469999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="3At-g4-uyh" firstAttribute="leading" secondItem="aPz-IH-1td" secondAttribute="leading" constant="20" id="4Y5-7U-1RC"/>
                             <constraint firstItem="aPz-IH-1td" firstAttribute="trailing" secondItem="QiZ-fn-ihQ" secondAttribute="trailing" constant="310" id="7vs-6m-lco"/>
@@ -437,14 +445,16 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="52G-IN-lb3">
                                 <rect key="frame" x="145" y="618" width="103" height="35"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="103" id="SBD-dg-EuD"/>
                                     <constraint firstAttribute="height" constant="35" id="gcI-SD-19k"/>
                                 </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="STAR">
-                                    <color key="baseForegroundColor" systemColor="tableCellBlueTextColor"/>
-                                </buttonConfiguration>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="STAR">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                                 <connections>
                                     <action selector="startBotonPresionado:" destination="bTN-xk-9Xk" eventType="touchUpInside" id="i2e-3C-eTk"/>
                                 </connections>
@@ -479,7 +489,7 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vrw-Wj-vmv">
                                 <rect key="frame" x="0.0" y="198" width="393" height="412"/>
-                                <color key="backgroundColor" red="0.92001146078109741" green="0.68125903606414795" blue="0.58351850509643555" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="393" id="K6Q-2s-IBi"/>
                                     <constraint firstAttribute="height" constant="412" id="e5B-HQ-JRg"/>
@@ -490,20 +500,22 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qWR-XT-oZb">
                                 <rect key="frame" x="34" y="618" width="94" height="35"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="94" id="lSG-jT-192"/>
                                 </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="Top 5🏅">
-                                    <color key="baseForegroundColor" systemColor="tableCellBlueTextColor"/>
-                                </buttonConfiguration>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Top 5🏅">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                                 <connections>
                                     <action selector="topmejoresBoton:" destination="bTN-xk-9Xk" eventType="touchUpInside" id="QqC-h6-tdd"/>
                                 </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="e6J-2L-YbD"/>
-                        <color key="backgroundColor" red="0.79260760549999998" green="0.93475395439999998" blue="0.85097080469999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="PGl-NG-bWO" firstAttribute="top" secondItem="e6J-2L-YbD" secondAttribute="top" id="0XS-48-EgZ"/>
                             <constraint firstItem="qWR-XT-oZb" firstAttribute="leading" secondItem="e6J-2L-YbD" secondAttribute="leading" constant="34" id="0ib-M6-9yl"/>
@@ -581,7 +593,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="75Q-ac-8xb"/>
-                        <color key="backgroundColor" red="0.79260760549999998" green="0.93475395439999998" blue="0.85097080469999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="75Q-ac-8xb" firstAttribute="bottom" secondItem="EvU-6b-L85" secondAttribute="bottom" id="EeF-8r-pcd"/>
                             <constraint firstItem="EvU-6b-L85" firstAttribute="trailing" secondItem="75Q-ac-8xb" secondAttribute="trailing" id="Eng-AI-1dG"/>
@@ -624,14 +636,11 @@
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="tableCellBlueTextColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="viewFlipsideBackgroundColor">
             <color red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -87,7 +87,7 @@ class SingUpViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .systemBackground
         
-        // Add subviews
+        // Add en la pantalla
         view.addSubview(titleLabel)
         view.addSubview(nameTextField)
         view.addSubview(emailTextField)
@@ -97,7 +97,7 @@ class SingUpViewController: UIViewController {
         view.addSubview(alreadyHaveAccountLabel)
         view.addSubview(loginButton)
         
-        // onstraints
+        // constraints
         NSLayoutConstraint.activate([
             // Titulos
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),

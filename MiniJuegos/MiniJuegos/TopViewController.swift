@@ -8,7 +8,7 @@ struct PuntajeData: Codable {
 
 // enum para definir qué tipo de vista mostrar
 enum TipoVista {
-    case top5           // Top 5 general
+    case top5           // Top 5 - Tocame
     case top10          // Top 10 para login
     case misPartidas    // Solo partidas del jugador actual
 }

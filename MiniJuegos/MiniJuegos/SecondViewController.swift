@@ -37,6 +37,7 @@ class SecondViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        repartirCartas.layer.cornerRadius = 8
         inicializarJuego()
         card11ImageView.image = UIImage(named: "decoracion")
         

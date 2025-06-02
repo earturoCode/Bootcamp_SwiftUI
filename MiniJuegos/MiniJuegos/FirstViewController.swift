@@ -22,6 +22,8 @@ class FirstViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        playBoton.layer.cornerRadius = 8
+        puntajesBoton.layer.cornerRadius = 8
         if let usuario = UserManager.shared.getCurrentUser() {
                 player1Label.text = usuario.username
             }
