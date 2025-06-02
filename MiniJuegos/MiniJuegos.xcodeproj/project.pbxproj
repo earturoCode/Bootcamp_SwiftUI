@@ -6,8 +6,25 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2AD8E3792DEE14EC00C62926 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD8E3782DEE14EC00C62926 /* Alamofire */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2AD8E37F2DEE159F00C62926 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		2AA4E6122DE4CCBE0023865C /* MiniJuegos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiniJuegos.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2AD8E3BF2DEE197A00C62926 /* MiniJuegos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiniJuegos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AD8E3792DEE14EC00C62926 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,16 +64,8 @@
 			isa = PBXGroup;
 			children = (
 				2AA4E6142DE4CCBE0023865C /* MiniJuegos */,
-				2AA4E6132DE4CCBE0023865C /* Products */,
+				2AD8E3BF2DEE197A00C62926 /* MiniJuegos.app */,
 			);
-			sourceTree = "<group>";
-		};
-		2AA4E6132DE4CCBE0023865C /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				2AA4E6122DE4CCBE0023865C /* MiniJuegos.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -68,6 +78,7 @@
 				2AA4E60E2DE4CCBE0023865C /* Sources */,
 				2AA4E60F2DE4CCBE0023865C /* Frameworks */,
 				2AA4E6102DE4CCBE0023865C /* Resources */,
+				2AD8E37F2DEE159F00C62926 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -77,10 +88,8 @@
 				2AA4E6142DE4CCBE0023865C /* MiniJuegos */,
 			);
 			name = MiniJuegos;
-			packageProductDependencies = (
-			);
 			productName = MiniJuegos;
-			productReference = 2AA4E6122DE4CCBE0023865C /* MiniJuegos.app */;
+			productReference = 2AD8E3BF2DEE197A00C62926 /* MiniJuegos.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -107,8 +116,11 @@
 			);
 			mainGroup = 2AA4E6092DE4CCBE0023865C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				2AD8E3772DEE14EC00C62926 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 2AA4E6132DE4CCBE0023865C /* Products */;
+			productRefGroup = 2AA4E6092DE4CCBE0023865C;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -333,6 +345,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2AD8E3772DEE14EC00C62926 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2AD8E3782DEE14EC00C62926 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2AD8E3772DEE14EC00C62926 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2AA4E60A2DE4CCBE0023865C /* Project object */;
 }

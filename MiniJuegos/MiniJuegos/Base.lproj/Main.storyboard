@@ -8,6 +8,22 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--PokeViewController-->
+        <scene sceneID="EXn-00-eS3">
+            <objects>
+                <viewController storyboardIdentifier="PokeViewController" title="PokeViewController" id="F1Z-AA-HBd" customClass="PokeViewController" customModule="MiniJuegos" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="e9p-oV-Fxt">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="KeP-zl-krA"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ZYM-nK-jtR"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PJ0-xL-7FZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2782" y="-685"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="R0v-d2-r1u">
             <objects>
@@ -265,6 +281,7 @@
                         <outlet property="rulesTextView" destination="ECZ-7d-a51" id="OAk-gz-1jB"/>
                         <segue destination="hZV-wm-i0p" kind="show" id="0ZV-OH-POm"/>
                         <segue destination="bTN-xk-9Xk" kind="show" id="hUt-qI-IGJ"/>
+                        <segue destination="F1Z-AA-HBd" kind="show" id="sxY-GF-K5B"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -1,6 +1,4 @@
-
 import UIKit
-
 class FirstViewController: UIViewController {
     
     //Elegir juego
@@ -16,7 +14,7 @@ class FirstViewController: UIViewController {
     
     @IBOutlet weak var rulesTextView: UITextView!
     
-    let games = ["Poker", "Tocame"]
+    let games = ["Poker", "Tocame","Pokemon"]
     var pickerView = UIPickerView()
     var jugador1: Jugador?
     
@@ -128,6 +126,12 @@ class FirstViewController: UIViewController {
             tocame.nombreJugador1 = nombre1
             
             self.show(tocame, sender: nil)
+        } else if juegoSeleccionado == "Pokemon" {
+            let poke = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "PokeViewController") as! PokeViewController
+            
+//            poke.nombreJugador1 = nombre1
+            
+            self.show(poke, sender: nil)
         }
     }
 
