@@ -27,7 +27,7 @@ class SecondViewController: UIViewController {
     
     @IBOutlet weak var repartirCartas: UIButton!
     
-    // AGREGADO: Variables para recibir los nombres del FirstViewController
+    // Variables para recibir los nombres del FirstViewController
     var nombreJugador1: String?
     var nombreJugador2: String?
     
