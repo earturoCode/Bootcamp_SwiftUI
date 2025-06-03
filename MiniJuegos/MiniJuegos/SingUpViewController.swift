@@ -1,4 +1,12 @@
 import UIKit
+import Alamofire
+
+struct SignUpRequest: Codable {
+    let username: String
+    let email: String
+    let password: String
+}
+
 
 class SingUpViewController: UIViewController {
     
@@ -179,8 +187,34 @@ class SingUpViewController: UIViewController {
             return
         }
         
+        // Crear el objeto para el request
+          let signUpData = SignUpRequest(username: name, email: email, password: password)
+          
+        // Usamos Alamofire para hacer la solicitud POST
+                AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+                    .validate() // Valida la respuesta (status code 200-299)
+                    .responseJSON { response in
+                        switch response.result {
+                        case .success(let value):
+                            print("Respuesta de Supabase: \(value)")
+                            
+                            // Aquí puedes manejar la respuesta de éxito o error
+                            DispatchQueue.main.async {
+                                if let response = value as? [String: Any], response["error"] != nil {
+                                    self.showAlert(title: "Error", message: "Hubo un problema al registrar el usuario")
+                                } else {
+                                    self.showAlert(title: "¡Éxito!", message: "Usuario registrado exitosamente")
+                                }
+                            }
+                            
+                        case .failure(let error):
+                            print("Error de red: \(error)")
+                            self.showAlert(title: "Error", message: "Hubo un error al registrar el usuario")
+                        }
+                    }
+        
         // Crear nuevo usuario
-        let newUser = User(username: name, email: email, password: password)
+//        let newUser = User(username: name, email: email, password: password)
         
         // Intentar guardar el usuario
         let result = UserManager.shared.saveUser(newUser)
