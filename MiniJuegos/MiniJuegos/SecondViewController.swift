@@ -58,6 +58,7 @@ class SecondViewController: UIViewController {
         repartirCartas.setTitle("Repartir", for: .normal)
     }
 
+
     
     
     

@@ -90,7 +90,9 @@ class SingUpViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
+
     }
+    
     
     private func setupUI() {
         view.backgroundColor = .systemBackground
@@ -153,7 +155,7 @@ class SingUpViewController: UIViewController {
     @objc private func loginButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
-
+    
     private func setupActions() {
         signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
@@ -213,10 +215,11 @@ class SingUpViewController: UIViewController {
     }
 
     
+    
     private func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default))
         present(alertController, animated: true, completion: nil)
     }
-
+    
 }

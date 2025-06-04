@@ -11,7 +11,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var registerBoton: UIButton!
     @IBOutlet weak var topBoton: UIButton!
     
-    let url = "https://lvmybcyhrbisfjouhbrx.supabase.co/auth/v1/token?grant_type=password"  // URL de Supabase para login
+    let url = "https://YOUR_SUPABASE_URL/auth/v1/token"  // URL de Supabase para login
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,17 +37,11 @@ class LoginViewController: UIViewController {
         // Preparar datos para la solicitud a Supabase
         let parameters: [String: Any] = [
             "email": usernameOrEmail,
-            "password": password,
-            "grant_type": "password"
-        ]
-        
-        // Configurar los encabezados para que la solicitud sea enviada como JSON
-        let headers: HTTPHeaders = [
-            "Content-Type": "application/json"
+            "password": password
         ]
         
         // Realizar solicitud POST a Supabase para obtener token
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil)
             .validate()
             .responseJSON { response in
                 switch response.result {
@@ -55,8 +49,8 @@ class LoginViewController: UIViewController {
                     print("Respuesta de Supabase: \(value)")
                     // Aquí puedes manejar la respuesta de éxito o error
                     DispatchQueue.main.async {
-                        if let response = value as? [String: Any], let error = response["error"] as? String {
-                            self.showAlert(title: "Error", message: error)
+                        if let response = value as? [String: Any], let error = response["error"] {
+                            self.showAlert(title: "Error", message: error as! String)
                         } else {
                             // Aquí puedes extraer la información que necesitas del response
                             self.handleLoginSuccess()
@@ -73,9 +67,8 @@ class LoginViewController: UIViewController {
     private func handleLoginSuccess() {
         // Navegar a FirstViewController
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let firstVC = storyboard.instantiateViewController(withIdentifier: "FirstViewController") as? FirstViewController {
-            navigationController?.pushViewController(firstVC, animated: true)
-        }
+        let firstVC = storyboard.instantiateViewController(withIdentifier: "FirstViewController") as! FirstViewController
+        navigationController?.pushViewController(firstVC, animated: true)
     }
     
     private func showAlert(title: String, message: String) {
@@ -86,9 +79,8 @@ class LoginViewController: UIViewController {
     
     @IBAction func registrarBoton(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let registerVC = storyboard.instantiateViewController(withIdentifier: "SingUpViewController") as? SingUpViewController {
-            navigationController?.pushViewController(registerVC, animated: true)
-        }
+        let registerVC = storyboard.instantiateViewController(withIdentifier: "SingUpViewController") as! SingUpViewController
+        navigationController?.pushViewController(registerVC, animated: true)
     }
     
     @IBAction func topTenBoton(_ sender: Any) {

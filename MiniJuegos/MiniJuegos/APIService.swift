@@ -1,6 +1,9 @@
 import UIKit
 import Alamofire
 
+//struct constants {
+//    static let apikey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2bXliY3locmJpc2Zqb3VoYnJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1Mjk2NzcsImV4cCI6MjA2NDEwNTY3N30.f2t60RjJh91cNlggE_2ViwPXZ1eXP7zD18rWplSI4jE" // Reemplaza con tu API key real
+//}
 
 
 class APIService {
@@ -12,7 +15,8 @@ class APIService {
             print("Email o contraseña vacíos")
             return
         }
-        let url = "https://lvmybcyhrbisfjouhbrx.supabase.co/auth/v1/signup" //endpoint
+        
+        let url = "https://lvmybcyhrbisfjouhbrx.supabase.co/auth/v1/signup"
         let modeloRegister = ModeloRegister(email: email, password: pass)
         let headers: HTTPHeaders = [
             "apikey": constants.apikey,
@@ -27,7 +31,6 @@ class APIService {
                                                 headers: headers)
                 .serializingDecodable(ModeloLoginResponse.self).value
             
-            //print("Token: \(response.acces_token)")
             print("User ID: \(response.user.id)")
             
         } catch let afError as AFError {
@@ -39,11 +42,8 @@ class APIService {
         } catch {
             print("Otro error: \(error)")
         }
-
-
-
     }
-    
+
     func login(email: String, pass: String) async {
         guard !email.isEmpty, !pass.isEmpty else {
             print("Email o contraseña vacíos")
@@ -83,6 +83,7 @@ class APIService {
             print("Otro error: \(error)")
         }
     }
+
 
     
     
