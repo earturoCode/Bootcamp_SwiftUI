@@ -11,7 +11,8 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var registerBoton: UIButton!
     @IBOutlet weak var topBoton: UIButton!
     
-    let url = "https://YOUR_SUPABASE_URL/auth/v1/token"  // URL de Supabase para login
+    // Corregir la URL - quitar el query parameter de la URL
+    let url = "https://lvmybcyhrbisfjouhbrx.supabase.co/auth/v1/token?grant_type=password"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,32 +35,81 @@ class LoginViewController: UIViewController {
             return
         }
         
-        // Preparar datos para la solicitud a Supabase
+        // Incluir grant_type en los parámetros, no en la URL
         let parameters: [String: Any] = [
             "email": usernameOrEmail,
-            "password": password
+            "password": password,
+            "grant_type": "password"  // ← Agregar esto aquí
         ]
         
-        // Realizar solicitud POST a Supabase para obtener token
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil)
-            .validate()
-            .responseJSON { response in
+        // Agregar headers necesarios para Supabase
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json",
+            "apikey": constants.apikey, // ← Reemplazar con tu API key real
+            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "Token"))" // ← Reemplazar con tu API key real
+        ]
+        
+        print("Enviando request a: \(url)")
+        print("Con parámetros: \(parameters)")
+        
+        AF.request(url,
+                  method: .post,
+                  parameters: parameters,
+                  encoding: JSONEncoding.default,
+                  headers: headers)
+            .validate(statusCode: 200..<300)  // ← Validar solo códigos 2xx
+            .responseData { response in
+                print("Response status code: \(response.response?.statusCode ?? 0)")
+                
                 switch response.result {
-                case .success(let value):
-                    print("Respuesta de Supabase: \(value)")
-                    // Aquí puedes manejar la respuesta de éxito o error
-                    DispatchQueue.main.async {
-                        if let response = value as? [String: Any], let error = response["error"] {
-                            self.showAlert(title: "Error", message: error as! String)
-                        } else {
-                            // Aquí puedes extraer la información que necesitas del response
-                            self.handleLoginSuccess()
+                case .success(let data):
+                    do {
+                        if let value = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                            print("Respuesta de Supabase: \(value)")
+                            
+                            DispatchQueue.main.async {
+                                // Verificar si hay error en la respuesta
+                                if let error = value["error"] as? [String: Any],
+                                   let errorMessage = error["message"] as? String {
+                                    self.showAlert(title: "Error de autenticación", message: errorMessage)
+                                } else if let accessToken = value["access_token"] as? String {
+                                    // Login exitoso
+                                    print("Token recibido: \(accessToken)")
+                                    self.handleLoginSuccess()
+                                } else {
+                                    self.showAlert(title: "Error", message: "Respuesta inesperada del servidor")
+                                }
+                            }
+                        }
+                    } catch {
+                        print("Error parsing JSON: \(error)")
+                        DispatchQueue.main.async {
+                            self.showAlert(title: "Error", message: "Error procesando la respuesta del servidor")
                         }
                     }
                     
                 case .failure(let error):
-                    print("Error de red: \(error)")
-                    self.showAlert(title: "Error", message: "Hubo un error al iniciar sesión")
+                    print("Error completo: \(error)")
+                    
+                    DispatchQueue.main.async {
+                        // Diferentes tipos de errores de red
+                        if let urlError = error.underlyingError as? URLError {
+                            switch urlError.code {
+                            case .notConnectedToInternet:
+                                self.showAlert(title: "Sin conexión", message: "Verifica tu conexión a internet")
+                            case .timedOut:
+                                self.showAlert(title: "Tiempo agotado", message: "La conexión tardó demasiado")
+                            case .cannotFindHost:
+                                self.showAlert(title: "Servidor no encontrado", message: "No se pudo conectar al servidor")
+                            case .networkConnectionLost:
+                                self.showAlert(title: "Conexión perdida", message: "Se perdió la conexión durante la petición")
+                            default:
+                                self.showAlert(title: "Error de red", message: "Error de conexión: \(urlError.localizedDescription)")
+                            }
+                        } else {
+                            self.showAlert(title: "Error", message: "Error al iniciar sesión: \(error.localizedDescription)")
+                        }
+                    }
                 }
             }
     }
@@ -85,7 +135,46 @@ class LoginViewController: UIViewController {
     
     @IBAction func topTenBoton(_ sender: Any) {
         guard let puntajesVC = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { return }
-        puntajesVC.tipoVista = .top10  // ← Esto hace la magia
+        puntajesVC.tipoVista = .top10
         navigationController?.pushViewController(puntajesVC, animated: true)
+    }
+}
+
+// MARK: - Extensión para testing sin headers (en caso de que no tengas la API key)
+extension LoginViewController {
+    
+    func testWithoutHeaders() {
+        // Versión simplificada para testing
+        guard let usernameOrEmail = correoUsuTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !usernameOrEmail.isEmpty,
+              let password = contrasenaTextField.text,
+              !password.isEmpty else {
+            showAlert(title: "Error", message: "Por favor completa todos los campos")
+            return
+        }
+        
+        let parameters: [String: Any] = [
+            "email": usernameOrEmail,
+            "password": password,
+            "grant_type": "password"
+        ]
+        
+        AF.request(url,
+                  method: .post,
+                  parameters: parameters,
+                  encoding: JSONEncoding.default)
+            .responseData { response in
+                print("Status code: \(response.response?.statusCode ?? 0)")
+                print("Response: \(String(data: response.data ?? Data(), encoding: .utf8) ?? "No data")")
+                
+                switch response.result {
+                case .success(let data):
+                    if let jsonString = String(data: data, encoding: .utf8) {
+                        print("Raw response: \(jsonString)")
+                    }
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }
     }
 }
