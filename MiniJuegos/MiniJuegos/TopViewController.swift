@@ -5,6 +5,13 @@ struct PuntajeData: Codable {
     let jugador: String
     let puntaje: Int
 }
+struct Score: Codable {
+    let user_id: String
+    let game_id: String
+    let score: Int
+    let date: String
+}
+
 
 // enum para definir qué tipo de vista mostrar
 enum TipoVista {
@@ -37,6 +44,30 @@ class TopViewController: UIViewController {
         topPlayerTable.reloadData()
     }
     
+    func fetchTopScores(completion: @escaping ([Score]) -> Void) {
+        guard let url = URL(string: "https://tu-api.com/api/scores") else {
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Error al obtener los puntajes: \(error)")
+                return
+            }
+
+            guard let data = data else { return }
+
+            do {
+                let scores = try JSONDecoder().decode([Score].self, from: data)
+                DispatchQueue.main.async {
+                    completion(scores)
+                }
+            } catch {
+                print("Error al decodificar los puntajes: \(error)")
+            }
+        }.resume()
+    }
+
     // Configuración de vista para los top
     func configurarVista() {
         switch tipoVista {
@@ -47,12 +78,13 @@ class TopViewController: UIViewController {
         case .misPartidas:
             if let jugador = jugadorFiltrado {
                 self.title = "Mis Puntajes - \(jugador)"
-            } else if let usuario = UserManager.shared.getCurrentUser() {
-                self.title = "Mis Puntajes - \(usuario.username)"
+            } else if let nombre = UserDefaults.standard.string(forKey: "username") {
+                self.title = "Mis Puntajes - \(nombre)"
             } else {
                 self.title = "Mis Puntajes"
             }
         }
+
     }
     
     func setupTableView() {
@@ -90,44 +122,41 @@ class TopViewController: UIViewController {
     }
     
     private func cargarTop10() {
-        if let data = UserDefaults.standard.data(forKey: "top5Puntajes"),
-           let puntajesData = try? JSONDecoder().decode([PuntajeData].self, from: data) {
-            
-            let todosPuntajes = puntajesData.map { (jugador: $0.jugador, puntaje: $0.puntaje) }
-            let puntajesOrdenados = todosPuntajes.sorted { $0.puntaje > $1.puntaje }
-            puntajesMostrados = Array(puntajesOrdenados.prefix(10))
-        } else {
-            puntajesMostrados = []
+        fetchTopScores { [weak self] scores in
+            guard let self = self else { return }
+            let puntajes = scores.map { (jugador: $0.user_id, puntaje: $0.score) }
+            let puntajesOrdenados = puntajes.sorted { $0.puntaje > $1.puntaje }
+            self.puntajesMostrados = Array(puntajesOrdenados.prefix(10))
+            self.topPlayerTable.reloadData()
         }
     }
+
     
     private func cargarMisPuntajes() {
-        // Determinar qué jugador filtrar
+        // Determinar el nombre del jugador
         let nombreJugador: String
         if let jugadorEspecifico = jugadorFiltrado {
             nombreJugador = jugadorEspecifico
-        } else if let usuario = UserManager.shared.getCurrentUser() {
-            nombreJugador = usuario.username
+        } else if let nombre = UserDefaults.standard.string(forKey: "username") {
+            nombreJugador = nombre
         } else {
             puntajesMostrados = []
             return
         }
-        
-        if let data = UserDefaults.standard.data(forKey: "top5Puntajes"),
-           let puntajesData = try? JSONDecoder().decode([PuntajeData].self, from: data) {
-            
-            // Filtrar solo los puntajes del jugador específico
-            let puntajesDelJugador = puntajesData
-                .filter { $0.jugador == nombreJugador }
-                .map { (jugador: $0.jugador, puntaje: $0.puntaje) }
-                .sorted { $0.puntaje > $1.puntaje }
-            
-            puntajesMostrados = puntajesDelJugador
-        } else {
-            puntajesMostrados = []
+
+        // Usar fetchTopScores para obtener datos desde la API
+        fetchTopScores { scores in
+            // Filtrar por el jugador actual
+            let puntajesDelJugador = scores
+                .filter { $0.user_id == nombreJugador }
+                .sorted { $0.score > $1.score }
+                .map { (jugador: $0.user_id, puntaje: $0.score) }
+
+            self.puntajesMostrados = puntajesDelJugador
+            self.topPlayerTable.reloadData()
         }
     }
-    
+
     // Gestión de puntajes
     func guardarPuntajesEnUserDefaults() {
         // Esta función mantiene todos los puntajes, no solo los mostrados
@@ -182,12 +211,13 @@ extension TopViewController: UITableViewDataSource, UITableViewDelegate {
         case .misPartidas:
             if let jugador = jugadorFiltrado {
                 return "Partidas de \(jugador)"
-            } else if let usuario = UserManager.shared.getCurrentUser() {
-                return "Partidas de \(usuario.username)"
+            } else if let nombre = UserDefaults.standard.string(forKey: "username") {
+                return "Partidas de \(nombre)"
             } else {
                 return "Mis Partidas"
             }
         }
+
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

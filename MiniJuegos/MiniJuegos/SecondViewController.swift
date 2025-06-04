@@ -44,8 +44,11 @@ class SecondViewController: UIViewController {
         // Configurar los nombres si vienen del FirstViewController
         if let nombre1 = nombreJugador1 {
             player1Label.text = nombre1
-        } else if let usuario = UserManager.shared.getCurrentUser() {
-            player1Label.text = usuario.username
+        } else {
+            // Recuperar el nombre del usuario desde UserDefaults
+            if let username = UserDefaults.standard.string(forKey: "currentUserName") {
+                player1Label.text = username
+            }
         }
         
         if let nombre2 = nombreJugador2 {
@@ -54,6 +57,7 @@ class SecondViewController: UIViewController {
         
         repartirCartas.setTitle("Repartir", for: .normal)
     }
+
     
     
     

@@ -69,7 +69,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="gray" title="Iniciar sesión"/>
                                 <connections>
-                                    <action selector="inciarSesionBoton:" destination="Qu1-M1-zGx" eventType="touchUpInside" id="5DN-Nh-Bb3"/>
+                                    <action selector="iniciarSesionBoton:" destination="Qu1-M1-zGx" eventType="touchUpInside" id="zTy-nF-HZ6"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="¿No tienes una cuenta?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gAG-by-Xe0">
@@ -216,10 +216,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="SlL-Ag-vuL">
-                                <rect key="frame" x="157" y="403" width="73" height="26"/>
-                                <color key="pageIndicatorTintColor" systemColor="tintColor"/>
-                            </pageControl>
                             <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7IF-8w-ur0">
                                 <rect key="frame" x="-1" y="269" width="390" height="151"/>
                                 <subviews>
@@ -253,6 +249,10 @@
                                 <viewLayoutGuide key="contentLayoutGuide" id="7AM-dn-fxN"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="cxb-rC-36O"/>
                             </scrollView>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="SlL-Ag-vuL">
+                                <rect key="frame" x="158" y="413" width="73" height="26"/>
+                                <color key="pageIndicatorTintColor" systemColor="tintColor"/>
+                            </pageControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -267,21 +267,21 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="SFm-xf-6Eo" secondAttribute="trailing" constant="161" id="J29-Lj-CV8"/>
                             <constraint firstItem="7IF-8w-ur0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="-1" id="N6g-cp-4dp"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rsM-bR-Jat" secondAttribute="trailing" constant="58" id="NgJ-Rh-t95"/>
-                            <constraint firstItem="SlL-Ag-vuL" firstAttribute="bottom" secondItem="cxb-rC-36O" secondAttribute="bottom" constant="9" id="PgU-Wx-tq0"/>
+                            <constraint firstItem="SlL-Ag-vuL" firstAttribute="bottom" secondItem="cxb-rC-36O" secondAttribute="bottom" constant="19" id="PgU-Wx-tq0"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="ECZ-7d-a51" secondAttribute="bottom" constant="85" id="UDD-u9-krA"/>
                             <constraint firstAttribute="bottom" secondItem="SFm-xf-6Eo" secondAttribute="bottom" constant="241" id="UUH-aP-ap0"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ECZ-7d-a51" secondAttribute="trailing" constant="58" id="UbH-ju-Mo1"/>
                             <constraint firstItem="ytJ-Mi-osy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="100" id="WGf-cz-dFb"/>
                             <constraint firstItem="7IF-8w-ur0" firstAttribute="top" secondItem="ytJ-Mi-osy" secondAttribute="bottom" constant="8" id="Wv2-nd-s3Y"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7IF-8w-ur0" secondAttribute="trailing" constant="4" id="XrD-ax-JTp"/>
-                            <constraint firstItem="SlL-Ag-vuL" firstAttribute="top" secondItem="cxb-rC-36O" secondAttribute="top" constant="134" id="YKw-RQ-y1i"/>
+                            <constraint firstItem="SlL-Ag-vuL" firstAttribute="top" secondItem="cxb-rC-36O" secondAttribute="top" constant="144" id="YKw-RQ-y1i"/>
                             <constraint firstItem="Nuj-QD-1rb" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.0352113" id="dDY-6S-ofc"/>
-                            <constraint firstItem="cxb-rC-36O" firstAttribute="trailing" secondItem="SlL-Ag-vuL" secondAttribute="trailing" constant="159" id="fVS-gP-flO"/>
+                            <constraint firstItem="cxb-rC-36O" firstAttribute="trailing" secondItem="SlL-Ag-vuL" secondAttribute="trailing" constant="158" id="fVS-gP-flO"/>
                             <constraint firstItem="Nuj-QD-1rb" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="100" id="gjc-M5-jbn"/>
                             <constraint firstItem="SFm-xf-6Eo" firstAttribute="top" secondItem="rsM-bR-Jat" secondAttribute="bottom" constant="21" id="pIA-5Q-wXC"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Nuj-QD-1rb" secondAttribute="trailing" constant="99" id="uav-z3-nkd"/>
                             <constraint firstItem="rsM-bR-Jat" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="55" id="udX-LW-9uc"/>
-                            <constraint firstItem="SlL-Ag-vuL" firstAttribute="leading" secondItem="cxb-rC-36O" secondAttribute="leading" constant="158" id="ui2-5f-r8f"/>
+                            <constraint firstItem="SlL-Ag-vuL" firstAttribute="leading" secondItem="cxb-rC-36O" secondAttribute="leading" constant="159" id="ui2-5f-r8f"/>
                             <constraint firstItem="ECZ-7d-a51" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="54" id="vGn-Zx-s9r"/>
                             <constraint firstItem="tuy-dT-8Gr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="55" id="zT7-yL-yQ4"/>
                             <constraint firstItem="rsM-bR-Jat" firstAttribute="top" secondItem="tuy-dT-8Gr" secondAttribute="bottom" constant="33" id="zqL-vC-Uob"/>
@@ -673,13 +673,13 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="viewFlipsideBackgroundColor">
             <color red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

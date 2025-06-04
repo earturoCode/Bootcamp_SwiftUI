@@ -25,8 +25,8 @@ class FirstViewController: UIViewController, UIScrollViewDelegate {
         playBoton.layer.cornerRadius = 8
         puntajesBoton.layer.cornerRadius = 8
         
-        if let usuario = UserManager.shared.getCurrentUser() {
-            player1Label.text = usuario.username
+        if let nombre = UserDefaults.standard.string(forKey: "username") {
+            player1Label.text = nombre
         }
         
         pageControll.numberOfPages = games.count
@@ -85,9 +85,11 @@ class FirstViewController: UIViewController, UIScrollViewDelegate {
 
     
     func mostrarImagenActual() {
-        let nombreImagen = games[juegoSeleccionado]
+        let nombreJuego = games[juegoSeleccionado]
         pageControll.currentPage = juegoSeleccionado
+        print("Juego actual: \(nombreJuego)")
     }
+
     
     @IBAction func nextPage(_ sender: Any) {
         if juegoSeleccionado < games.count - 1 {

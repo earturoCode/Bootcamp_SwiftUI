@@ -1,6 +1,8 @@
 import UIKit
+import Alamofire
 
 class LoginViewController: UIViewController {
+    
     @IBOutlet weak var tittleLoginLabel: UILabel!
     @IBOutlet weak var tittleRegisLabel: UILabel!
     @IBOutlet weak var correoUsuTextField: UITextField!
@@ -9,55 +11,73 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var registerBoton: UIButton!
     @IBOutlet weak var topBoton: UIButton!
     
-    
+    let url = "https://lvmybcyhrbisfjouhbrx.supabase.co/auth/v1/token"  // URL de Supabase para login
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         loginBoton.layer.cornerRadius = 8
         topBoton.layer.cornerRadius = 8
-
     }
     
     private func setupUI() {
         contrasenaTextField.isSecureTextEntry = true
     }
     
-    @IBAction func inciarSesionBoton(_ sender: Any) {
-
+    @IBAction func iniciarSesionBoton(_ sender: Any) {
+        
         guard let usernameOrEmail = correoUsuTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
-                      !usernameOrEmail.isEmpty,
-                      let password = contrasenaTextField.text,
-                      !password.isEmpty else {
-                    showAlert(title: "Error", message: "Por favor completa todos los campos")
-                    return
-                }
-                
-                // Intentar login con username
-                var loginResult = UserManager.shared.validateLogin(username: usernameOrEmail, password: password)
-                
-                // Si no funciona con username, intentar con email (opcional)
-                if !loginResult.success {
-                    // Buscar usuario por email
-                    let users = UserManager.shared.getAllUsers()
-                    if let userByEmail = users.first(where: { $0.email.lowercased() == usernameOrEmail.lowercased() }) {
-                        if userByEmail.password == password {
-                            loginResult = (true, userByEmail)
+              !usernameOrEmail.isEmpty,
+              let password = contrasenaTextField.text,
+              !password.isEmpty else {
+            showAlert(title: "Error", message: "Por favor completa todos los campos")
+            return
+        }
+        
+        // Preparar datos para la solicitud a Supabase
+        let parameters: [String: Any] = [
+            "email": usernameOrEmail,
+            "password": password,
+            "grant_type": "password"
+        ]
+        
+        // Configurar los encabezados para que la solicitud sea enviada como JSON
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json"
+        ]
+        
+        // Realizar solicitud POST a Supabase para obtener token
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print("Respuesta de Supabase: \(value)")
+                    // Aquí puedes manejar la respuesta de éxito o error
+                    DispatchQueue.main.async {
+                        if let response = value as? [String: Any], let error = response["error"] as? String {
+                            self.showAlert(title: "Error", message: error)
+                        } else {
+                            // Aquí puedes extraer la información que necesitas del response
+                            self.handleLoginSuccess()
                         }
                     }
-                }
-                
-                if loginResult.success, let user = loginResult.user {
-                    // Guardar usuario actual para la sesión
-                    UserManager.shared.setCurrentUser(user)
                     
-                    // Navegar a FirstViewController
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let firstVC = storyboard.instantiateViewController(withIdentifier: "FirstViewController") as! FirstViewController
-                    navigationController?.pushViewController(firstVC, animated: true)
-                } else {
-                    showAlert(title: "Error", message: "Usuario o contraseña incorrectos")
+                case .failure(let error):
+                    print("Error de red: \(error)")
+                    self.showAlert(title: "Error", message: "Hubo un error al iniciar sesión")
                 }
+            }
     }
+    
+    private func handleLoginSuccess() {
+        // Navegar a FirstViewController
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let firstVC = storyboard.instantiateViewController(withIdentifier: "FirstViewController") as? FirstViewController {
+            navigationController?.pushViewController(firstVC, animated: true)
+        }
+    }
+    
     private func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default))
@@ -66,8 +86,9 @@ class LoginViewController: UIViewController {
     
     @IBAction func registrarBoton(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let registerVC = storyboard.instantiateViewController(withIdentifier: "SingUpViewController") as! SingUpViewController
-        navigationController?.pushViewController(registerVC, animated: true)
+        if let registerVC = storyboard.instantiateViewController(withIdentifier: "SingUpViewController") as? SingUpViewController {
+            navigationController?.pushViewController(registerVC, animated: true)
+        }
     }
     
     @IBAction func topTenBoton(_ sender: Any) {

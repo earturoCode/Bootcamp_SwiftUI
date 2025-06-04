@@ -188,62 +188,31 @@ class SingUpViewController: UIViewController {
         }
         
         // Crear el objeto para el request
-          let signUpData = SignUpRequest(username: name, email: email, password: password)
-          
-        // Usamos Alamofire para hacer la solicitud POST
-                AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
-                    .validate() // Valida la respuesta (status code 200-299)
-                    .responseJSON { response in
-                        switch response.result {
-                        case .success(let value):
-                            print("Respuesta de Supabase: \(value)")
-                            
-                            // Aquí puedes manejar la respuesta de éxito o error
-                            DispatchQueue.main.async {
-                                if let response = value as? [String: Any], response["error"] != nil {
-                                    self.showAlert(title: "Error", message: "Hubo un problema al registrar el usuario")
-                                } else {
-                                    self.showAlert(title: "¡Éxito!", message: "Usuario registrado exitosamente")
-                                }
-                            }
-                            
-                        case .failure(let error):
-                            print("Error de red: \(error)")
-                            self.showAlert(title: "Error", message: "Hubo un error al registrar el usuario")
-                        }
-                    }
+        let signUpData = SignUpRequest(username: name, email: email, password: password)
         
-        // Crear nuevo usuario
-//        let newUser = User(username: name, email: email, password: password)
-        
-        // Intentar guardar el usuario
-        let result = UserManager.shared.saveUser(newUser)
-        
-        if result.success {
-            // Auto-login después del registro exitoso
-            UserManager.shared.setCurrentUser(newUser)
+        // Llamar al servicio para hacer la solicitud de registro
+        Task {
+            await APIService.shared.signup(email: email, pass: password)
             
-            // Mostrar mensaje de éxito y navegar directamente a FirstViewController
-            let alert = UIAlertController(title: "¡Éxito!", message: result.message, preferredStyle: .alert)
+            // Después de completar el registro, puedes hacer lo siguiente
+            // 1. Mostrar mensaje de éxito
+            // 2. Guardar el nombre de usuario en UserDefaults si es necesario
+            UserDefaults.standard.set(name, forKey: "username")
+            
+            // 3. Ir a la siguiente pantalla
+            let alert = UIAlertController(title: "¡Éxito!", message: "Usuario registrado exitosamente", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default) { _ in
-                // Navegar directamente a FirstViewController
+                // Navegar al siguiente controlador
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let firstVC = storyboard.instantiateViewController(withIdentifier: "") as! FirstViewController
-                
-                // Limpiar el stack de navegación y ir a FirstViewController
-                var viewControllers = self.navigationController?.viewControllers ?? []
-                // Remover el LoginViewController del stack si existe
-                viewControllers.removeAll { $0 is LoginViewController }
-                viewControllers.append(firstVC)
-                
-                self.navigationController?.setViewControllers(viewControllers, animated: true)
+                if let firstVC = storyboard.instantiateViewController(withIdentifier: "FirstViewController") as? FirstViewController {
+                    self.navigationController?.pushViewController(firstVC, animated: true)
+                }
             })
-            present(alert, animated: true)
-        } else {
-            // Mostrar error
-            showAlert(title: "Error", message: result.message)
+            self.present(alert, animated: true, completion: nil)
         }
     }
+
+    
     private func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default))
