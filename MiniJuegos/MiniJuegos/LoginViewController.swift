@@ -11,8 +11,8 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var registerBoton: UIButton!
     @IBOutlet weak var topBoton: UIButton!
     
-    let url = "https://lvmybcyhrbisfjouhbrx.supabase.co/auth/v1/token"  // URL de Supabase para login
-
+    let url = "https://lvmybcyhrbisfjouhbrx.supabase.co/auth/v1/token?grant_type=password"  // URL de Supabase para login
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
