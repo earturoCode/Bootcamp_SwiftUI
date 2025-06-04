@@ -46,8 +46,8 @@
             filePath = "MiniJuegos/APIService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
             landmarkName = "ModeloRegister"
             landmarkType = "14">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "MiniJuegos/APIService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
             landmarkName = "ModeloRegister"
             landmarkType = "14">
          </BreakpointContent>

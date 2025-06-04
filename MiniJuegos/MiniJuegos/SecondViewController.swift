@@ -58,11 +58,6 @@ class SecondViewController: UIViewController {
         repartirCartas.setTitle("Repartir", for: .normal)
     }
 
-
-    
-    
-    
-    
     func inicializarJuego() {
         
         // Crear el mazo y mezclarlo
@@ -70,7 +65,6 @@ class SecondViewController: UIViewController {
         mazo?.mezclar()
         
     }
-    
     
     @IBAction func repartirCards(_ sender: UIButton) {
         //Validacion de acuerdo que tiene el boton de titulo
@@ -83,11 +77,7 @@ class SecondViewController: UIViewController {
                 self.present(alerta, animated: true)
                 return
             }
-            
-            
 
-//            player1Label.isHidden = true
-//            player2Label.isHidden = true
             fondo1ImageView.isHidden = false
             fondo2ImageView.isHidden = false
             
@@ -134,10 +124,6 @@ class SecondViewController: UIViewController {
             
         } else if sender.currentTitle == "Volver a Jugar" {
             limpiarImagenes()
-            
-   
-//            player1Label.isHidden = false
-//            player2Label.isHidden = false
             fondo1ImageView?.backgroundColor = UIColor.clear
             fondo2ImageView?.backgroundColor = UIColor.clear
             

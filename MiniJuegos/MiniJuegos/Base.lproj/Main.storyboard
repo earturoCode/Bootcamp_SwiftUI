@@ -492,7 +492,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="startBotonPresionado:" destination="bTN-xk-9Xk" eventType="touchUpInside" id="i2e-3C-eTk"/>
+                                    <action selector="startButtonPressed:" destination="bTN-xk-9Xk" eventType="touchUpInside" id="gry-pt-Lnk"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="300" verticalHuggingPriority="251" text="Player" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PGl-NG-bWO">
@@ -546,7 +546,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="topmejoresBoton:" destination="bTN-xk-9Xk" eventType="touchUpInside" id="QqC-h6-tdd"/>
+                                    <action selector="verTop5Pressed:" destination="bTN-xk-9Xk" eventType="touchUpInside" id="cmO-dJ-Vtv"/>
                                 </connections>
                             </button>
                         </subviews>

@@ -1,6 +1,5 @@
 import UIKit
 
-// MARK: - Modelos
 struct Score: Codable {
     let user_id: String
     let game_id: String
@@ -38,7 +37,6 @@ class TopViewController: UIViewController {
         topPlayerTable.delegate = self
     }
 
-    // MARK: - Lógica de red
     func fetchTopScores(completion: @escaping ([Score]) -> Void) {
         guard let url = URL(string: "https://tu-api.com/api/scores") else {
             print("URL inválida")
@@ -67,7 +65,6 @@ class TopViewController: UIViewController {
         }.resume()
     }
 
-    // MARK: - Lógica para adaptar los puntajes mostrados
     func cargarPuntajesDesdeBackend() {
         fetchTopScores { [weak self] scores in
             guard let self = self else { return }
@@ -98,7 +95,6 @@ class TopViewController: UIViewController {
     }
 }
 
-// MARK: - UITableViewDataSource & Delegate
 extension TopViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

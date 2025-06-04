@@ -11,7 +11,6 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var registerBoton: UIButton!
     @IBOutlet weak var topBoton: UIButton!
     
-    // Corregir la URL - quitar el query parameter de la URL
     let url = "https://lvmybcyhrbisfjouhbrx.supabase.co/auth/v1/token?grant_type=password"
     
     override func viewDidLoad() {
@@ -35,18 +34,16 @@ class LoginViewController: UIViewController {
             return
         }
         
-        // Incluir grant_type en los parámetros, no en la URL
         let parameters: [String: Any] = [
             "email": usernameOrEmail,
             "password": password,
-            "grant_type": "password"  // ← Agregar esto aquí
+            "grant_type": "password"
         ]
         
-        // Agregar headers necesarios para Supabase
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
-            "apikey": constants.apikey, // ← Reemplazar con tu API key real
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "Token"))" // ← Reemplazar con tu API key real
+            "apikey": constants.apikey, // ← API key real
+            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "Token"))" // ← API key real
         ]
         
         print("Enviando request a: \(url)")
@@ -140,7 +137,6 @@ class LoginViewController: UIViewController {
     }
 }
 
-// MARK: - Extensión para testing sin headers (en caso de que no tengas la API key)
 extension LoginViewController {
     
     func testWithoutHeaders() {
