@@ -76,7 +76,7 @@ class FirstViewController: UIViewController, UIScrollViewDelegate {
             if let img = UIImage(named: nombreImagen) {
                 imageView.image = img
             } else {
-                print("❌ Imagen no encontrada: \(nombreImagen)")
+                print("Imagen no encontrada: \(nombreImagen)")
             }
             imageView.contentMode = .scaleAspectFit
             scrollView.addSubview(imageView)
@@ -142,7 +142,16 @@ class FirstViewController: UIViewController, UIScrollViewDelegate {
     
     @IBAction func puntajesTotalBoton(_ sender: Any) {
         guard let vc = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { return }
-        vc.tipoVista = .misPartidas  // ← Solo mis puntajes
+
+        // Verificar si el usuario está logueado
+        if let _ = UserDefaults.standard.string(forKey: "Token") {
+            // Usuario logueado - Mostrar Top 5 (mis puntajes + Top 5)
+            vc.tipoVista = .top5
+        } else {
+            // Usuario no logueado - Mostrar Top 10 general
+            vc.tipoVista = .top10
+        }
+
         navigationController?.pushViewController(vc, animated: true)
     }
     

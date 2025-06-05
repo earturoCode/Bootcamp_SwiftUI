@@ -1,111 +1,119 @@
-import UIKit
+    import UIKit
 
-struct Score: Codable {
-    let user_id: String
-    let game_id: String
-    let score: Int
-    let date: String
-}
-
-enum TipoVista {
-    case top5           // Top 5 - Tocame
-    case top10          // Top 10 para login
-    case misPartidas    // Solo partidas del jugador actual
-}
-
-class TopViewController: UIViewController {
-
-    @IBOutlet weak var topPlayerTable: UITableView!
-    
-    var puntajesMostrados: [(jugador: String, puntaje: Int)] = []
-    var tipoVista: TipoVista = .top5
-    var jugadorFiltrado: String?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupTableView()
-        cargarPuntajesDesdeBackend()
+    enum TipoVista {
+        case top5           // Top 5 - Tocame
+        case top10          // Top 10 para login
+        case misPartidas    // Solo partidas del jugador actual
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        cargarPuntajesDesdeBackend()
-    }
+    class TopViewController: UIViewController {
 
-    private func setupTableView() {
-        topPlayerTable.dataSource = self
-        topPlayerTable.delegate = self
-    }
+        @IBOutlet weak var topPlayerTable: UITableView!
+        
+        var puntajesMostrados: [(jugador: String, puntaje: Int)] = []
+        var tipoVista: TipoVista = .top5
+        var jugadorFiltrado: String?
 
-    func fetchTopScores(completion: @escaping ([Score]) -> Void) {
-        guard let url = URL(string: "https://tu-api.com/api/scores") else {
-            print("URL inválida")
-            return
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            setupTableView()
+            cargarPuntajesDesdeBackend()
         }
 
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Error al obtener los puntajes: \(error)")
-                return
-            }
+        override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            cargarPuntajesDesdeBackend()
+        }
 
-            guard let data = data else {
-                print("No se recibió data")
-                return
-            }
-
-            do {
-                let scores = try JSONDecoder().decode([Score].self, from: data)
-                DispatchQueue.main.async {
-                    completion(scores)
+        private func setupTableView() {
+            topPlayerTable.dataSource = self
+            topPlayerTable.delegate = self
+        }
+        private func setupNavigationTitle() {
+                switch tipoVista {
+                case .top5:
+                    title = "Top 5 - Tocame"
+                case .top10:
+                    title = "Top 10 General"
+                case .misPartidas:
+                    title = "Mis Partidas"
                 }
-            } catch {
-                print("Error al decodificar: \(error)")
             }
-        }.resume()
-    }
-
-    func cargarPuntajesDesdeBackend() {
-        fetchTopScores { [weak self] scores in
-            guard let self = self else { return }
-
-            switch self.tipoVista {
-            case .top5:
-                self.puntajesMostrados = scores
-                    .sorted { $0.score > $1.score }
-                    .prefix(5)
-                    .map { ($0.user_id, $0.score) }
-
-            case .top10:
-                self.puntajesMostrados = scores
-                    .sorted { $0.score > $1.score }
-                    .prefix(10)
-                    .map { ($0.user_id, $0.score) }
-
-            case .misPartidas:
-                guard let jugador = self.jugadorFiltrado else { return }
-                self.puntajesMostrados = scores
-                    .filter { $0.user_id == jugador }
-                    .sorted { $0.score > $1.score }
-                    .map { ($0.user_id, $0.score) }
+            
+            func cargarPuntajesDesdeBackend() {
+                Task {
+                    do {
+                        var scores: [Score]
+                        
+                        switch tipoVista {
+                        case .top5:
+                            scores = try await APIService.shared.getScore(gameId: "tocame")
+                            // o con userId también
+                            puntajesMostrados = Array(scores.prefix(5))
+                                .map { ($0.user_id, $0.score) }
+                            
+                        case .top10:
+                            scores = try await APIService.shared.getScore(requiresAuth: false)
+                            puntajesMostrados = Array(scores.prefix(10))
+                                .map { ($0.user_id, $0.score) }
+                            
+                        case .misPartidas:
+                            let jugador = jugadorFiltrado ?? UserDefaults.standard.string(forKey: "username") ?? ""
+                            scores = try await APIService.shared.getScore(gameId: "tocame", userId: jugador)
+                            puntajesMostrados = scores.map { ($0.user_id, $0.score) }
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.topPlayerTable.reloadData()
+                        }
+                        
+                    } catch {
+                        print("Error al cargar puntajes: \(error)")
+                        DispatchQueue.main.async {
+                            self.showErrorAlert()
+                        }
+                    }
+                }
             }
-
-            self.topPlayerTable.reloadData()
+            
+            private func showErrorAlert() {
+                let alert = UIAlertController(
+                    title: "Error",
+                    message: "No se pudieron cargar los puntajes",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                present(alert, animated: true)
+            }
         }
-    }
-}
 
 extension TopViewController: UITableViewDataSource, UITableViewDelegate {
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return puntajesMostrados.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PuntajeCell", for: indexPath)
         let puntaje = puntajesMostrados[indexPath.row]
+        
+        // Configurar la celda
         cell.textLabel?.text = "\(indexPath.row + 1). \(puntaje.jugador)"
         cell.detailTextLabel?.text = "Puntaje: \(puntaje.puntaje)"
+        
+        // Estilo para el top 3
+        if indexPath.row < 3 && tipoVista != .misPartidas {
+            cell.backgroundColor = UIColor.systemYellow.withAlphaComponent(0.3)
+        } else {
+            cell.backgroundColor = UIColor.systemBackground
+        }
+        
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
 }
+
+      
