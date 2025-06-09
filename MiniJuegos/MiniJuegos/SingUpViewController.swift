@@ -189,29 +189,77 @@ class SingUpViewController: UIViewController {
             return
         }
         
-        // Crear el objeto para el request
-        let signUpData = SignUpRequest(username: name, email: email, password: password)
+        // Deshabilitar botón y mostrar loading
+        signUpButton.isEnabled = false
+        signUpButton.setTitle("Registrando...", for: .normal)
+        signUpButton.backgroundColor = .systemGray
         
         // Llamar al servicio para hacer la solicitud de registro
         Task {
-            await APIService.shared.signup(email: email, pass: password)
-            
-            // Después de completar el registro, puedes hacer lo siguiente
-            // 1. Mostrar mensaje de éxito
-            // 2. Guardar el nombre de usuario en UserDefaults si es necesario
-            UserDefaults.standard.set(name, forKey: "username")
-            
-            // 3. Ir a la siguiente pantalla
-            let alert = UIAlertController(title: "¡Éxito!", message: "Usuario registrado exitosamente", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default) { _ in
-                // Navegar al siguiente controlador
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                if let firstVC = storyboard.instantiateViewController(withIdentifier: "FirstViewController") as? FirstViewController {
-                    self.navigationController?.pushViewController(firstVC, animated: true)
+            do {
+                try await APIService.shared.signup(email: email, pass: password)
+                
+                // Guardar el nombre de usuario
+                UserDefaults.standard.set(name, forKey: "username")
+                
+                // Mostrar éxito en el hilo principal
+                await MainActor.run {
+                    self.showSuccessAndNavigate()
                 }
-            })
-            self.present(alert, animated: true, completion: nil)
+                
+            } catch {
+                await MainActor.run {
+                    let errorMessage: String
+                    
+                    // Verificar si es un error de red/conexión
+                    if let afError = error as? AFError {
+                        switch afError {
+                        case .sessionTaskFailed(let sessionError):
+                            if let urlError = sessionError as? URLError {
+                                switch urlError.code {
+                                case .notConnectedToInternet, .networkConnectionLost, .timedOut:
+                                    errorMessage = "No tienes conexión a internet. Por favor verifica tu conexión e inténtalo de nuevo."
+                                default:
+                                    errorMessage = "Error de conexión. Inténtalo de nuevo."
+                                }
+                            } else {
+                                errorMessage = "Error de red. Inténtalo de nuevo."
+                            }
+                        case .responseValidationFailed:
+                            errorMessage = "Este email ya está registrado o hay un problema con los datos."
+                        default:
+                            errorMessage = "Error de conexión con el servidor."
+                        }
+                    } else {
+                        errorMessage = "Ocurrió un error inesperado: \(error.localizedDescription)"
+                    }
+                    
+                    self.showAlert(title: "Error", message: errorMessage)
+                    self.resetButton()
+                }
+            }
         }
+    }
+    // Método auxiliar para resetear el botón
+    private func resetButton() {
+        signUpButton.isEnabled = true
+        signUpButton.setTitle("Registrarse", for: .normal)
+        signUpButton.backgroundColor = .systemBlue
+    }
+
+    // Método auxiliar para mostrar éxito y navegar
+    private func showSuccessAndNavigate() {
+        resetButton()
+        
+        let alert = UIAlertController(title: "¡Éxito!", message: "Usuario registrado exitosamente", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Continuar", style: .default) { _ in
+            // Navegar al siguiente controlador
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let firstVC = storyboard.instantiateViewController(withIdentifier: "FirstViewController") as? FirstViewController {
+                self.navigationController?.pushViewController(firstVC, animated: true)
+            }
+        })
+        present(alert, animated: true)
     }
 
     

@@ -37,16 +37,19 @@ class ThirdViewController: UIViewController {
     }
 
     func guardarPuntajeEnAPI() {
-        let nombreJugador = nombreJugador1 ?? UserDefaults.standard.string(forKey: "username") ?? "Jugador"
+        guard let userId = UserDefaults.standard.string(forKey: "UserID"), !userId.isEmpty else {
+            print("No hay UserID guardado")
+            return
+        }
         
         Task {
             do {
                 try await APIService.shared.guardarScore(
-                    userId: nombreJugador,
+                    userId: userId,
                     gameId: "tocame",
                     score: puntaje
                 )
-                print("Puntaje guardado exitosamente: \(puntaje) para \(nombreJugador)")
+                print("Puntaje guardado exitosamente: \(puntaje) para userId: \(userId)")
             } catch {
                 print("Error al guardar puntaje en API: \(error)")
                 DispatchQueue.main.async {

@@ -18,6 +18,7 @@
             super.viewDidLoad()
             setupTableView()
             cargarPuntajesDesdeBackend()
+            setupNavigationTitle()
         }
 
         override func viewWillAppear(_ animated: Bool) {
@@ -58,9 +59,8 @@
                                 .map { ($0.user_id, $0.score) }
                             
                         case .misPartidas:
-                            let jugador = jugadorFiltrado ?? UserDefaults.standard.string(forKey: "username") ?? ""
+                            let jugador = jugadorFiltrado ?? UserDefaults.standard.string(forKey: "UserID") ?? ""
                             scores = try await APIService.shared.getScore(gameId: "tocame", userId: jugador)
-                            puntajesMostrados = scores.map { ($0.user_id, $0.score) }
                         }
                         
                         DispatchQueue.main.async {

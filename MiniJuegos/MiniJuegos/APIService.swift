@@ -4,8 +4,8 @@ import Alamofire
 class APIService {
     static let shared = APIService()
     private init() {}
-    
-    func signup(email: String, pass: String) async {
+
+    func signup(email: String, pass: String) async throws {
         guard !email.isEmpty, !pass.isEmpty else {
             print("Email o contraseña vacíos")
             return
@@ -18,18 +18,28 @@ class APIService {
             "Content-Type": "application/json"
         ]
         
-        do {
-            let response = try await AF.request(url,
-                                                method: .post,
-                                                parameters: modeloRegister,
-                                                encoder: JSONParameterEncoder.default,
-                                                headers: headers)
-                .serializingDecodable(ModeloLoginResponse.self).value
+        let response = try await AF.request(url,
+                                            method: .post,
+                                            parameters: modeloRegister,
+                                            encoder: JSONParameterEncoder.default,
+                                            headers: headers)
+            .serializingDecodable(ModeloLoginResponse.self).value
+        
+        print("User ID: \(response.user.id)")
+        
+        // Guardar datos del usuario exitoso
+        UserDefaults.standard.set(response.access_token, forKey: "Token")
+        UserDefaults.standard.set(response.user.id, forKey: "UserID")
+    }
+
+    // Función auxiliar para verificar conexión a internet
+    private func conexionBackend() async -> Bool {
+        return await withCheckedContinuation { continuation in
+            let networkManager = NetworkReachabilityManager()
             
-            print("User ID: \(response.user.id)")
-            
-        } catch {
-            print("Error al registrarse: \(error.localizedDescription)")
+            // Verificar estado actual
+            let isReachable = networkManager?.isReachable ?? false
+            continuation.resume(returning: isReachable)
         }
     }
     
@@ -112,17 +122,23 @@ class APIService {
         
         if let userId = userId {
             queryItems.append(URLQueryItem(name: "user_id", value: "eq.\(userId)"))
+            print("Filtrando por userId: \(userId)")
         }
         
         if let gameId = gameId {
             queryItems.append(URLQueryItem(name: "game_id", value: "eq.\(gameId)"))
+            print("Filtrando por gameId: \(gameId)")
         }
+        
+        queryItems.append(URLQueryItem(name: "select", value: "*"))
         
         queryItems.append(URLQueryItem(name: "order", value: "score.desc"))
         
         var components = URLComponents(string: url)!
         components.queryItems = queryItems
         url = components.url!.absoluteString
+        
+        print("URL final: \(url)")
         
         var headers: HTTPHeaders = [
             "Content-Type": "application/json",
