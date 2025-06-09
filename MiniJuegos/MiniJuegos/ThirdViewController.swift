@@ -42,14 +42,18 @@ class ThirdViewController: UIViewController {
             return
         }
         
+        guard let token = UserDefaults.standard.string(forKey: "Token"), !token.isEmpty else {
+            print("No hay Token guardado")
+            return
+        }
+        
+        let gameId = "1"
+        
         Task {
             do {
-                try await APIService.shared.guardarScore(
-                    userId: userId,
-                    gameId: "tocame",
-                    score: puntaje
-                )
-                print("Puntaje guardado exitosamente: \(puntaje) para userId: \(userId)")
+                // Llamamos a tu función `guardarScore` pasándole `userId`, `gameId` y `score`
+                try await APIService.shared.guardarScore(userId: userId, score: puntaje)
+                print("Puntaje guardado exitosamente para userId: \(userId) y gameId: \(gameId)")
             } catch {
                 print("Error al guardar puntaje en API: \(error)")
                 DispatchQueue.main.async {
@@ -58,6 +62,7 @@ class ThirdViewController: UIViewController {
             }
         }
     }
+
     
     func mostrarErrorGuardado() {
         let alerta = UIAlertController(

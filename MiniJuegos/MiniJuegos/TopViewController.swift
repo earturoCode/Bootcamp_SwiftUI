@@ -42,25 +42,26 @@
             }
             
             func cargarPuntajesDesdeBackend() {
+                
                 Task {
                     do {
                         var scores: [Score]
                         
                         switch tipoVista {
                         case .top5:
-                            scores = try await APIService.shared.getScore(gameId: "tocame")
-                            // o con userId también
+                            scores = try await APIService.shared.getScore(gameId: "1")
                             puntajesMostrados = Array(scores.prefix(5))
                                 .map { ($0.user_id, $0.score) }
-                            
+
                         case .top10:
                             scores = try await APIService.shared.getScore(requiresAuth: false)
                             puntajesMostrados = Array(scores.prefix(10))
                                 .map { ($0.user_id, $0.score) }
-                            
+
                         case .misPartidas:
                             let jugador = jugadorFiltrado ?? UserDefaults.standard.string(forKey: "UserID") ?? ""
-                            scores = try await APIService.shared.getScore(gameId: "tocame", userId: jugador)
+                            scores = try await APIService.shared.getScore(gameId: "1", userId: jugador)
+                            puntajesMostrados = scores.map { ($0.user_id, $0.score) }
                         }
                         
                         DispatchQueue.main.async {

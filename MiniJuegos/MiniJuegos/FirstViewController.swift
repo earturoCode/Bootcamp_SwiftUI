@@ -131,9 +131,6 @@ class FirstViewController: UIViewController, UIScrollViewDelegate {
         }
     }
 
-    
-    //    ---------------------------------------------
-    
     @objc func validarBoton() {
         let texto1 = player1Label.text ?? ""
         playBoton.isEnabled = !texto1.isEmpty

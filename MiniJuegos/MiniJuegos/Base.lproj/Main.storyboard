@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="z4U-ev-NkK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
@@ -250,7 +250,7 @@
                                 <viewLayoutGuide key="frameLayoutGuide" id="cxb-rC-36O"/>
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="SlL-Ag-vuL">
-                                <rect key="frame" x="158" y="413" width="73" height="26"/>
+                                <rect key="frame" x="158" y="421" width="73" height="26"/>
                                 <color key="pageIndicatorTintColor" systemColor="tintColor"/>
                             </pageControl>
                         </subviews>
@@ -267,14 +267,14 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="SFm-xf-6Eo" secondAttribute="trailing" constant="161" id="J29-Lj-CV8"/>
                             <constraint firstItem="7IF-8w-ur0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="-1" id="N6g-cp-4dp"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rsM-bR-Jat" secondAttribute="trailing" constant="58" id="NgJ-Rh-t95"/>
-                            <constraint firstItem="SlL-Ag-vuL" firstAttribute="bottom" secondItem="cxb-rC-36O" secondAttribute="bottom" constant="19" id="PgU-Wx-tq0"/>
+                            <constraint firstItem="SlL-Ag-vuL" firstAttribute="bottom" secondItem="cxb-rC-36O" secondAttribute="bottom" constant="27" id="PgU-Wx-tq0"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="ECZ-7d-a51" secondAttribute="bottom" constant="85" id="UDD-u9-krA"/>
                             <constraint firstAttribute="bottom" secondItem="SFm-xf-6Eo" secondAttribute="bottom" constant="241" id="UUH-aP-ap0"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ECZ-7d-a51" secondAttribute="trailing" constant="58" id="UbH-ju-Mo1"/>
                             <constraint firstItem="ytJ-Mi-osy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="100" id="WGf-cz-dFb"/>
                             <constraint firstItem="7IF-8w-ur0" firstAttribute="top" secondItem="ytJ-Mi-osy" secondAttribute="bottom" constant="8" id="Wv2-nd-s3Y"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7IF-8w-ur0" secondAttribute="trailing" constant="4" id="XrD-ax-JTp"/>
-                            <constraint firstItem="SlL-Ag-vuL" firstAttribute="top" secondItem="cxb-rC-36O" secondAttribute="top" constant="144" id="YKw-RQ-y1i"/>
+                            <constraint firstItem="SlL-Ag-vuL" firstAttribute="top" secondItem="cxb-rC-36O" secondAttribute="top" constant="152" id="YKw-RQ-y1i"/>
                             <constraint firstItem="Nuj-QD-1rb" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.0352113" id="dDY-6S-ofc"/>
                             <constraint firstItem="cxb-rC-36O" firstAttribute="trailing" secondItem="SlL-Ag-vuL" secondAttribute="trailing" constant="158" id="fVS-gP-flO"/>
                             <constraint firstItem="Nuj-QD-1rb" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="100" id="gjc-M5-jbn"/>
@@ -673,13 +673,13 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="viewFlipsideBackgroundColor">
             <color red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
