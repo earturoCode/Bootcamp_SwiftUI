@@ -1,118 +1,120 @@
-import UIKit
-// Estructura para UserDefaults
-struct PuntajeData: Codable {
-    let jugador: String
-    let puntaje: Int
-}
-class TopViewController: UIViewController {
+    import UIKit
 
-    @IBOutlet weak var topPlayerTable: UITableView!
-    // Array para almacenar los puntajes (será actualizado desde ThirdViewController)
-    var top5Puntajes: [(jugador: String, puntaje: Int)] = []
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-//        UserDefaults.standard.removeObject(forKey: "top5Puntajes")
-        setupTableView()
-        if top5Puntajes.isEmpty {
-            cargarPuntajesDesdeUserDefaults()
-        } else {
-            // Ya se pasaron puntajes desde ThirdViewController, no recargar
-        }
-
-        
-        // Configurar la vista
-        self.title = "Top 5 Jugadores"
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        cargarPuntajesDesdeUserDefaults()
-        // Recargar datos cada vez que aparece la vista
-        topPlayerTable.reloadData()
-    }
-    
-    func setupTableView() {
-//        topPlayerTable.register(UITableViewCell.self, forCellReuseIdentifier: "celdaConDetalle") solo si tengo en otro archivo
-
-        
-        topPlayerTable.dataSource = self
-        topPlayerTable.delegate = self
-        
-        // Configuración adicional de la tabla
-        topPlayerTable.backgroundColor = UIColor.systemGroupedBackground
-        topPlayerTable.separatorStyle = .singleLine
-        topPlayerTable.rowHeight = 60
-    }
-    
-    
-    // Función para cargar puntajes desde UserDefaults
-    func cargarPuntajesDesdeUserDefaults() {
-        if let data = UserDefaults.standard.data(forKey: "top5Puntajes"),
-           let puntajesData = try? JSONDecoder().decode([PuntajeData].self, from: data) {
-            top5Puntajes = puntajesData.map { (jugador: $0.jugador, puntaje: $0.puntaje) }
-        } else {
-            top5Puntajes = []
-        }
-    }
-    
-    func guardarPuntajesEnUserDefaults() {
-        let datos = top5Puntajes.map { PuntajeData(jugador: $0.jugador, puntaje: $0.puntaje) }
-        if let encoded = try? JSONEncoder().encode(datos) {
-            UserDefaults.standard.set(encoded, forKey: "top5Puntajes")
-        }
+    enum TipoVista {
+        case top5           // Top 5 - Tocame
+        case top10          // Top 10 para login
+        case misPartidas    // Solo partidas del jugador actual
     }
 
-    
-    // Función para agregar y ordenar un nuevo puntaje (si es necesario)
-    func agregarNuevoPuntaje(_ puntaje: (jugador: String, puntaje: Int)) {
-        // Agregar el nuevo puntaje al array
-        top5Puntajes.append(puntaje)
+    class TopViewController: UIViewController {
+
+        @IBOutlet weak var topPlayerTable: UITableView!
         
-        // Ordenar por puntaje de mayor a menor
-        top5Puntajes.sort { $0.puntaje > $1.puntaje }
-        
-        // Mantener solo los top 5
-        if top5Puntajes.count > 5 {
-            top5Puntajes = Array(top5Puntajes.prefix(5))
+        var puntajesMostrados: [(jugador: String, puntaje: Int)] = []
+        var tipoVista: TipoVista = .top5
+        var jugadorFiltrado: String?
+
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            setupTableView()
+            cargarPuntajesDesdeBackend()
+            setupNavigationTitle()
         }
-        guardarPuntajesEnUserDefaults()
-        // Actualizar la tabla
-        topPlayerTable.reloadData()
-    }
-}
-    
-  
+
+        override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            cargarPuntajesDesdeBackend()
+        }
+
+        private func setupTableView() {
+            topPlayerTable.dataSource = self
+            topPlayerTable.delegate = self
+        }
+        private func setupNavigationTitle() {
+                switch tipoVista {
+                case .top5:
+                    title = "Top 5 - Tocame"
+                case .top10:
+                    title = "Top 10 General"
+                case .misPartidas:
+                    title = "Mis Partidas"
+                }
+            }
+            
+            func cargarPuntajesDesdeBackend() {
+                
+                Task {
+                    do {
+                        var scores: [Score]
+                        
+                        switch tipoVista {
+                        case .top5:
+                            scores = try await APIService.shared.getScore(gameId: "1")
+                            puntajesMostrados = Array(scores.prefix(5))
+                                .map { ($0.user_id, $0.score) }
+
+                        case .top10:
+                            scores = try await APIService.shared.getScore(requiresAuth: false)
+                            puntajesMostrados = Array(scores.prefix(10))
+                                .map { ($0.user_id, $0.score) }
+
+                        case .misPartidas:
+                            let jugador = jugadorFiltrado ?? UserDefaults.standard.string(forKey: "UserID") ?? ""
+                            scores = try await APIService.shared.getScore(gameId: "1", userId: jugador)
+                            puntajesMostrados = scores.map { ($0.user_id, $0.score) }
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.topPlayerTable.reloadData()
+                        }
+                        
+                    } catch {
+                        print("Error al cargar puntajes: \(error)")
+                        DispatchQueue.main.async {
+                            self.showErrorAlert()
+                        }
+                    }
+                }
+            }
+            
+            private func showErrorAlert() {
+                let alert = UIAlertController(
+                    title: "Error",
+                    message: "No se pudieron cargar los puntajes",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                present(alert, animated: true)
+            }
+        }
 
 extension TopViewController: UITableViewDataSource, UITableViewDelegate {
     
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return top5Puntajes.isEmpty ? 1 : top5Puntajes.count
+        return puntajesMostrados.count
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Top 5 de Mejores jugadores"
-    }
-    
-    
-    //    Se llama cada vez que el tableView necesita una Celda para cada jugador, nombre y puntaje.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellIdentifier = "celdaConDetalle"
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PuntajeCell", for: indexPath)
+        let puntaje = puntajesMostrados[indexPath.row]
         
-//        if cell == nil {
-//            cell = UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
-//        }
-//
-        let jugador = top5Puntajes[indexPath.row]
-        cell.textLabel?.text = "\(indexPath.row + 1). \(jugador.jugador) "
-        cell.detailTextLabel?.text = "\(jugador.puntaje) pts"
-        cell.detailTextLabel?.textColor = .red
+        // Configurar la celda
+        cell.textLabel?.text = "\(indexPath.row + 1). \(puntaje.jugador)"
+        cell.detailTextLabel?.text = "Puntaje: \(puntaje.puntaje)"
+        
+        // Estilo para el top 3
+        if indexPath.row < 3 && tipoVista != .misPartidas {
+            cell.backgroundColor = UIColor.systemYellow.withAlphaComponent(0.3)
+        } else {
+            cell.backgroundColor = UIColor.systemBackground
+        }
+        
         return cell
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
 }
 
-
-
+      

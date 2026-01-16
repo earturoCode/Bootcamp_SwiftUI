@@ -6,6 +6,7 @@
 
 | Carpeta                  | Descripción                                                               |
 |--------------------------|---------------------------------------------------------------------------|
+| `MiniJuegos`            | App con Login-Register-Selector de Juegos-Poker-Tocame                   |
 | `Poker_UIKIT 2.0`           | Poker con UIKIT 2.0                   |
 | `Poker_UIKIT 3.0`            | Poker con UIKIT 3.0 - Ganador se ilumina                    |
 

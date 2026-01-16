@@ -1,90 +1,101 @@
 import UIKit
 
+struct PuntajeData: Codable {
+    let jugador: String
+    let puntaje: Int
+}
+
 class ThirdViewController: UIViewController {
-    
+
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var namej1TextField: UILabel!
     @IBOutlet weak var puntajeLabel: UILabel!
     @IBOutlet weak var startBoton: UIButton!
-    
     @IBOutlet weak var verTop5: UIButton!
     @IBOutlet weak var areaGenerarLabel: UILabel!
-    
-    // Variable para recibir el nombre del jugador desde FirstViewController
+
     var nombreJugador1: String?
-    
+
     var timer: Timer?
     var gameTimer: Timer?
-    var segundos = 30
+    var segundos = 10
     var puntaje = 0
     var juegoActivo = false
     var objetosCirculares: [UIView] = []
-    //  Usar UserDefaults para persistir los puntajes entre sesiones
-    var listaPuntajes: [(jugador: String, puntaje: Int)] = []
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        //  Inicializar la UI correctamente desde el inicio
+        startBoton.layer.cornerRadius = 8
+        verTop5.layer.cornerRadius = 8
         inicializarUI()
-        
-        cargarPuntajes()
-        
-        // Mostrar el nombre del jugador recibido desde FirstViewController
+
         if let nombre = nombreJugador1 {
             namej1TextField.text = nombre
         } else {
             namej1TextField.text = "Jugador"
         }
     }
-    
-    // Función para cargar puntajes desde UserDefaults
-    func cargarPuntajes() {
-        if let data = UserDefaults.standard.data(forKey: "top5Puntajes"),
-           let puntajesData = try? JSONDecoder().decode([PuntajeData].self, from: data) {
-            listaPuntajes = puntajesData.map { (jugador: $0.jugador, puntaje: $0.puntaje) }
-        } else {
-            // Datos por defecto si no hay nada guardado
-            listaPuntajes = []
+
+    func guardarPuntajeEnAPI() {
+        guard let userId = UserDefaults.standard.string(forKey: "UserID"), !userId.isEmpty else {
+            print("No hay UserID guardado")
+            return
+        }
+        
+        guard let token = UserDefaults.standard.string(forKey: "Token"), !token.isEmpty else {
+            print("No hay Token guardado")
+            return
+        }
+        
+        let gameId = "1"
+        
+        Task {
+            do {
+                // Llamamos a tu función `guardarScore` pasándole `userId`, `gameId` y `score`
+                try await APIService.shared.guardarScore(userId: userId, score: puntaje)
+                print("Puntaje guardado exitosamente para userId: \(userId) y gameId: \(gameId)")
+            } catch {
+                print("Error al guardar puntaje en API: \(error)")
+                DispatchQueue.main.async {
+                    self.mostrarErrorGuardado()
+                }
+            }
         }
     }
+
     
-    //    función para guardar puntajes en UserDefaults
-    func guardarPuntajes() {
-        let puntajesData = listaPuntajes.map { PuntajeData(jugador: $0.jugador, puntaje: $0.puntaje) }
-        if let data = try? JSONEncoder().encode(puntajesData) {
-            UserDefaults.standard.set(data, forKey: "top5Puntajes")
-            //            UserDefaults.standard.synchronize() // Forzar sincronización
-        }
+    func mostrarErrorGuardado() {
+        let alerta = UIAlertController(
+            title: "Error",
+            message: "No se pudo guardar el puntaje. Verifica tu conexión a internet.",
+            preferredStyle: .alert
+        )
+        alerta.addAction(UIAlertAction(title: "Aceptar", style: .default, handler: nil))
+        present(alerta, animated: true, completion: nil)
     }
-    
+
     // Función para inicializar la UI
     func inicializarUI() {
-        // Configurar timer inicial (30 segundos)
+        // Configurar timer inicial (10 segundos)
         timerLabel.text = "10 s"
         
         // Configurar puntaje inicial (0 puntos)
         puntajeLabel.text = "Puntuación: 0"
+        
+        // Reiniciar valores
+        segundos = 10
+        puntaje = 0
         
         // Asegurar que no hay bolitas visibles al inicio
         objetosCirculares.forEach { $0.removeFromSuperview() }
         objetosCirculares.removeAll()
     }
     
-    @IBAction func startBotonPresionado(_ sender: UIButton) {
+    @IBAction func startButtonPressed(_ sender: UIButton) {
         iniciarJuego()
     }
     
-    @IBAction func topmejoresBoton(_ sender: Any) {
-        guard let puntajesVC = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { return }
-        
-        // Pasar los puntajes actualizados
-        puntajesVC.top5Puntajes = listaPuntajes
-        navigationController?.pushViewController(puntajesVC, animated: true)
-    }
-    
-    
-    @objc func iniciarJuego() {
-        
+    func iniciarJuego() {
         if juegoActivo {
             return
         }
@@ -136,7 +147,7 @@ class ThirdViewController: UIViewController {
     
     func iniciarGeneracionObjetos() {
         gameTimer?.invalidate()
-        gameTimer = Timer.scheduledTimer(timeInterval: 1.5, // Aparece cada 1.5 segundos
+        gameTimer = Timer.scheduledTimer(timeInterval: 2.0, // Aparece cada 2 segundos
                                          target: self,
                                          selector: #selector(crearObjetoCircular),
                                          userInfo: nil,
@@ -145,10 +156,10 @@ class ThirdViewController: UIViewController {
         // Crear primer objeto inmediatamente
         crearObjetoCircular()
     }
-    
+
     @objc func crearObjetoCircular() {
         if !juegoActivo { return }
-        
+                
         // Remover objetos existentes
         objetosCirculares.forEach { $0.removeFromSuperview() }
         objetosCirculares.removeAll()
@@ -157,7 +168,7 @@ class ThirdViewController: UIViewController {
         let tamano: CGFloat = 60
         
         // Calcular posición SOLAMENTE dentro del área de areaGenerarLabel
-        let margen: CGFloat = 10 // Margen más pequeño para aprovechar mejor el espacio
+        let margen: CGFloat = 10
         
         // Obtener las dimensiones exactas del areaGenerarLabel
         let areaFrame = areaGenerarLabel.frame
@@ -176,7 +187,7 @@ class ThirdViewController: UIViewController {
         circulo.layer.borderWidth = 3
         circulo.layer.borderColor = UIColor.white.cgColor
         
-        // Agregar sombra para mejor visibilidad - ESTA DEMAS
+        // Agregar sombra para mejor visibilidad
         circulo.layer.shadowColor = UIColor.black.cgColor
         circulo.layer.shadowOffset = CGSize(width: 2, height: 2)
         circulo.layer.shadowOpacity = 0.3
@@ -187,18 +198,18 @@ class ThirdViewController: UIViewController {
         circulo.addGestureRecognizer(tapGesture)
         circulo.isUserInteractionEnabled = true
         
-        // Animación de aparición - ESTA DEMAS
-//        circulo.alpha = 0
-//        circulo.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+        // Animación de aparición
+        circulo.alpha = 0
+        circulo.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
         
         view.addSubview(circulo)
         objetosCirculares.append(circulo)
         
-//        // Animar aparición
-//        UIView.animate(withDuration: 0.3, animations: {
-//            circulo.alpha = 1
-//            circulo.transform = CGAffineTransform.identity
-//        })
+        // Animar aparición
+        UIView.animate(withDuration: 0.3, animations: {
+            circulo.alpha = 1
+            circulo.transform = CGAffineTransform.identity
+        })
         
         // Programar desaparición automática después de 2 segundos
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -207,7 +218,7 @@ class ThirdViewController: UIViewController {
             }
         }
     }
-    
+
     @objc func objetoTocado(_ gesture: UITapGestureRecognizer) {
         guard let circulo = gesture.view, juegoActivo else { return }
         
@@ -228,18 +239,18 @@ class ThirdViewController: UIViewController {
             }
         }
         
-        // Efecto de vibración - ESTA DEMAS
+        // Efecto de vibración
         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
         impactFeedback.impactOccurred()
     }
-    
+
     func removerObjeto(_ objeto: UIView) {
         objeto.removeFromSuperview()
         if let index = objetosCirculares.firstIndex(of: objeto) {
             objetosCirculares.remove(at: index)
         }
     }
-    
+
     func obtenerColorAleatorio() -> UIColor {
         let colores: [UIColor] = [
             .systemRed, .systemBlue, .systemGreen, .systemOrange,
@@ -247,7 +258,7 @@ class ThirdViewController: UIViewController {
         ]
         return colores.randomElement() ?? .systemBlue
     }
-    
+
     func finalizarJuego() {
         juegoActivo = false
         
@@ -263,75 +274,30 @@ class ThirdViewController: UIViewController {
         startBoton.backgroundColor = .systemGreen
         startBoton.isEnabled = true
         
-        
-        // Guardar el puntaje final del jugador
-        if let nombre = nombreJugador1 {
-            agregarYGuardarPuntaje(jugador: nombre, puntaje: puntaje)
-        }
-
         timerLabel.text = "10 s"
         segundos = 10
         
+        // Guardar puntaje en API
+        guardarPuntajeEnAPI()
+        
+        // Mostrar resultado final
         let nombreJugador = namej1TextField.text ?? "Jugador"
         mostrarResultado(jugador: nombreJugador, puntuacion: puntaje)
     }
-    
-    //        Centraliza la lógica de agregar y guardar puntajes
-    func agregarYGuardarPuntaje(jugador: String, puntaje: Int) {
-        listaPuntajes.append((jugador: jugador, puntaje: puntaje))
-        listaPuntajes.sort { $0.puntaje > $1.puntaje }
-        
-        if listaPuntajes.count > 5 {
-            listaPuntajes = Array(listaPuntajes.prefix(5))
-        }
-        
-        guardarPuntajes()
-    }
-    
-    
-    
+
     func mostrarResultado(jugador: String, puntuacion: Int) {
-        let alert = UIAlertController(title: "¡Juego Terminado!",
-                                      message: " \(jugador)\n 🏆 Puntuación final: \(puntuacion)",
-                                      preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "Jugar de Nuevo", style: .default) { _ in
-            self.inicializarUI()
-        })
-        
-        alert.addAction(UIAlertAction(title: "Volver al Menú", style: .cancel) { _ in
-            self.navigationController?.popViewController(animated: true)
-        })
-        
-        present(alert, animated: true)
+        let alerta = UIAlertController(
+            title: "¡Fin del Juego!",
+            message: "\(jugador), tu puntaje final es: \(puntuacion) puntos",
+            preferredStyle: .alert
+        )
+        alerta.addAction(UIAlertAction(title: "Aceptar", style: .default, handler: nil))
+        present(alerta, animated: true, completion: nil)
     }
-    
-    func mostrarAlerta(mensaje: String) {
-        let alert = UIAlertController(title: "Atención",
-                                      message: mensaje,
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+
+    @IBAction func verTop5Pressed(_ sender: UIButton) {
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { return }
+        vc.tipoVista = .top5
+        navigationController?.pushViewController(vc, animated: true)
     }
-    
-    // Limpiar recursos al salir
-    deinit {
-        timer?.invalidate()
-        gameTimer?.invalidate()
-        
-    }
-    @IBAction func verTop5Presionado(_ sender: UIButton) {
-        guard let topVC = storyboard?.instantiateViewController(withIdentifier: "TopViewController") as? TopViewController else { //"puntajeID") as? TopViewController else
-            print("Error: No se pudo instanciar puntajeID")
-            return
-        }
-        // Usar NavigationController para navegar
-        navigationController?.pushViewController(topVC, animated: true)
-    }
-    //    Estructura para codificar/decodificar los puntajes
-    struct PuntajeData: Codable {
-        let jugador: String
-        let puntaje: Int
-    }
-    
 }
